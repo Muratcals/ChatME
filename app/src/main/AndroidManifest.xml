@@ -20,9 +20,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"
-            android:label="@string/title_activity_login"
-            android:theme="@style/Theme.ChatME.NoActionBar" />
+            android:exported="false"/>
         <activity
             android:name=".SplashActivity"
             android:exported="true">

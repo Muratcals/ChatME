@@ -27,7 +27,7 @@ class RegisterViewModel @Inject constructor(
                 auth.fetchSignInMethodsForEmail(userInformation.mail).addOnSuccessListener {
                     if (it.signInMethods?.isEmpty()==true){
                         if (passwordController(activity.applicationContext,password)){
-                            database.collection("UserInformation").add(userInformation).addOnCompleteListener { databaseResult->
+                            database.collection("User Information").add(userInformation).addOnCompleteListener { databaseResult->
                                 if (databaseResult.isSuccessful){
                                     auth.createUserWithEmailAndPassword(userInformation.mail,password).addOnCompleteListener { authResult->
                                         if (authResult.isSuccessful){
