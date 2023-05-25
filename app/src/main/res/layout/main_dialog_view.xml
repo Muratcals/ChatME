@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundColor"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_14ssp"
+        android:text="Hesap Ekle"
+        android:textColor="@color/white"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/buttonColor"/>
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:textColor="@color/white"
+        android:textStyle="normal"
+        android:textAllCaps="false"
+        android:text="Mevcut hesaba giriş yap"
+        app:backgroundTint="@null"
+        android:background="@drawable/button_background_shape"
+        android:textSize="@dimen/_9ssp"/>
+
+    <TextView
+        android:id="@+id/createUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yeni hesap oluştur"
+        android:textColor="@color/buttonColor"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="normal"
+        android:textAllCaps="false"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/_20sdp"/>
+</LinearLayout>
