@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_15ssp"
         android:text="Hesap Ekle"
         android:textColor="@color/white"
         android:layout_marginBottom="@dimen/_10sdp"
@@ -19,8 +19,9 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/buttonColor"/>
+        android:layout_height="0.5dp"
+        android:background="@color/buttonColor"
+        android:layout_marginVertical="@dimen/_5sdp"/>
 
     <Button
         android:id="@+id/login"
@@ -34,7 +35,7 @@
         android:text="Mevcut hesaba giriş yap"
         app:backgroundTint="@null"
         android:background="@drawable/button_background_shape"
-        android:textSize="@dimen/_9ssp"/>
+        android:textSize="@dimen/_10ssp"/>
 
     <TextView
         android:id="@+id/createUser"
