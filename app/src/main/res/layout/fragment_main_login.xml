@@ -50,7 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_marginVertical="@dimen/_10sdp"
-            android:hint="Şifre">
+            android:hint="Şifre"
+            app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginPassword"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,167 +8,189 @@
     android:orientation="vertical"
     tools:context=".view.ProffilFragment">
 
-    <include layout="@layout/profil_toolbar" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_15sdp"
-        android:orientation="horizontal">
+        android:id="@+id/profilLayout"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profilImage"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_90sdp"
-            android:layout_weight="2"
-            android:src="@drawable/profile_icon" />
+        <include
+            android:id="@+id/profilToolbar"
+            layout="@layout/profil_toolbar" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
             android:orientation="horizontal">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profilImage"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_90sdp"
+                android:layout_weight="2"
+                android:src="@drawable/profile_icon" />
+
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/shareCount"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="sans-serif-black"
-                        android:text="0"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_11ssp" />
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:orientation="vertical">
 
-                    <TextView
+                        <TextView
+                            android:id="@+id/shareCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="sans-serif-black"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Paylaş"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11ssp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Paylaş"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_11ssp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_marginHorizontal="@dimen/_20sdp"
+                        android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_20sdp"
-                    android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/followCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="sans-serif-black"
+                            android:text="22"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11ssp" />
 
-                    <TextView
-                        android:id="@+id/followCount"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Takipçi"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11ssp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="sans-serif-black"
-                        android:text="22"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_11ssp" />
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Takipçi"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_11ssp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/followedCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="sans-serif-black"
+                            android:text="100"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11ssp" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Takip"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11ssp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/followedCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="sans-serif-black"
-                        android:text="100"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_11ssp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Takip"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_11ssp"
-                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/profilUserName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_15sdp"
-            android:text="MURAT ÇALIŞ"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_13ssp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/profilBiography"
+            <TextView
+                android:id="@+id/profilUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:text="MURAT ÇALIŞ"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/profilBiography"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:text="biyografi"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_15sdp"
-            android:text="biyografi"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_12ssp"
-            android:textStyle="normal" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/profilEditButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/button_background_shape"
+                android:text="Profili Düzenle"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_12ssp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/profilEditButton"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userImagesRecycler"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:background="@drawable/button_background_shape"
-            android:text="Profili Düzenle"
-            android:textAllCaps="false"
-            android:textSize="@dimen/_12ssp" />
-
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            tools:ignore="RtlSymmetry" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/userImagesRecycler"
-        android:layout_width="match_parent"
+    <ProgressBar
+        android:id="@+id/profilProgressBar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/_10sdp"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        tools:ignore="RtlSymmetry" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

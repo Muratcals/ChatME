@@ -13,12 +13,24 @@
 
     <TextView
         android:id="@+id/profilDetailseToolbarTitle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Ad"
         android:gravity="center"
         android:textSize="@dimen/_14sdp"
         android:textColor="@color/white"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/profilDetailseToolbarSuccess"
+        android:layout_width="wrap_content"
+        android:clickable="false"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:text="Bitti"
+        android:gravity="end"
+        android:textSize="@dimen/_14sdp"
+        android:textColor="@color/gray"
         android:textStyle="bold"/>
 </Toolbar>

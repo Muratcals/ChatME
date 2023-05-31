@@ -3,7 +3,9 @@ package com.example.chatme
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.navigation.NavHostController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.chatme.databinding.ActivityMainBinding
 import com.example.chatme.model.MessageModel
@@ -25,8 +27,9 @@ class MainActivity : AppCompatActivity() {
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val uuid = UUID.randomUUID().variant()
-        val navcontroller =findNavController(binding.fragmentContainerView.id)
-        binding.mainBottomMenu.setupWithNavController(navcontroller)
+        supportActionBar!!.hide()
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        binding.mainBottomMenu.setupWithNavController(navHostFragment.navController)
     }
     /*
            button.setOnClickListener {

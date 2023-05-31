@@ -18,10 +18,9 @@ class RegisterViewModel @Inject constructor(
 ) : ViewModel() {
 
     val progress =MutableLiveData<Boolean>()
-
     fun createUser(activity: Activity,userInformation: UserInformationModel,password: String){
         progress.value=true
-        database.collection("User Information").whereEqualTo("userName",userInformation.userName).get().addOnSuccessListener {
+        database.collection("User Information").whereEqualTo("userName",userInformation.authName).get().addOnSuccessListener {
             if (it.isEmpty){
                 auth.fetchSignInMethodsForEmail(userInformation.mail).addOnSuccessListener {
                     if (it.signInMethods?.isEmpty()==true){
