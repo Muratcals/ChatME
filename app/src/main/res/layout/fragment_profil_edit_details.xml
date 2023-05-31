@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/backgroundColor"
+    tools:context=".view.ProfilEditDetailsFragment">
+
+<include layout="@layout/profil_edit_details_toolbar"
+    android:id="@+id/profilDetailsToolbar"/>
+    <TextView
+        android:id="@+id/profilDetailsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ad"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:textSize="@dimen/_15ssp"
+        android:textColor="#797878"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:padding="@dimen/_5sdp">
+
+        <EditText
+            android:id="@+id/profilDetailsTitleContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundColor"
+            android:hint="Kullanıcı adı"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15ssp"
+            android:textColorHint="@color/white"
+            android:layout_marginEnd="@dimen/_50sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+           />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilDetailsClearText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:src="@drawable/text_clear_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</LinearLayout>

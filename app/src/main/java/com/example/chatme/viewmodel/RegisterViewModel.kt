@@ -1,4 +1,4 @@
-package com.example.chatme.view
+package com.example.chatme.viewmodel
 
 import android.app.Activity
 import android.content.Context
@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import com.example.chatme.model.UserInformationModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 

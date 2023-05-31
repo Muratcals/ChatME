@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import com.example.chatme.databinding.FragmentMainLoginBinding
+import com.example.chatme.viewmodel.MainLoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

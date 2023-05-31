@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@+id/homePage" android:title="" android:enabled="true" android:icon="@drawable/main_icon" />
+    <item android:id="@+id/search" android:icon="@drawable/search_icon" android:title=""/>
+    <item android:title="" android:id="@+id/proffilFragment" android:icon="@drawable/profile_icon"/>
+
+</menu>

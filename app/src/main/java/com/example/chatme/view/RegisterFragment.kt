@@ -1,16 +1,16 @@
 package com.example.chatme.view
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.chatme.R
 import com.example.chatme.databinding.FragmentRegisterBinding
 import com.example.chatme.model.UserInformationModel
+import com.example.chatme.viewmodel.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,7 +50,8 @@ class RegisterFragment : Fragment() {
                 (!binding.registerGenderFemale.isChecked || !binding.registerGenderMale.isChecked)){
                 Toast.makeText(requireContext(), "Bütün bilgilieri doldur", Toast.LENGTH_SHORT).show()
             }else{
-                val user =UserInformationModel(binding.registerName.text.toString(),binding.registerMail.text.toString(),binding.registerUserName.text.toString(),gender)
+                val uuid=UUID.randomUUID().variant()
+                val user =UserInformationModel(uuid,binding.registerName.text.toString(),binding.registerMail.text.toString(),binding.registerUserName.text.toString(),gender, biography = "")
                 viewModel.createUser(requireActivity(),user,binding.registerPassword.text.toString())
             }
         }

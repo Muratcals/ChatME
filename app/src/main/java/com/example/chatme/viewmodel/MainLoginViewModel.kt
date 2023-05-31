@@ -1,15 +1,13 @@
-package com.example.chatme.view
+package com.example.chatme.viewmodel
 
 import android.app.Activity
 import android.content.Intent
-import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import com.example.chatme.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
