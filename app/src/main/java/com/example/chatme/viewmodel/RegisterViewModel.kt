@@ -25,24 +25,22 @@ class RegisterViewModel @Inject constructor(
                 auth.fetchSignInMethodsForEmail(userInformation.mail).addOnSuccessListener {
                     if (it.signInMethods?.isEmpty()==true){
                         if (passwordController(activity.applicationContext,password)){
-                            database.collection("User Information").add(userInformation).addOnCompleteListener { databaseResult->
-                                if (databaseResult.isSuccessful){
+                            database.collection("User Information").document(userInformation.mail).set(userInformation).addOnSuccessListener { databaseResult->
                                     auth.createUserWithEmailAndPassword(userInformation.mail,password).addOnCompleteListener { authResult->
                                         if (authResult.isSuccessful){
                                             Toast.makeText(activity.applicationContext, "Kayıt başarılı. Giriş yapabilirsin", Toast.LENGTH_SHORT).show()
                                             progress.value=false
                                             activity.finish()
                                         }else{
-                                            database.collection("User Information").document(databaseResult.result.id).delete().addOnSuccessListener {
+                                            database.collection("User Information").document(auth.currentUser!!.email.toString()).delete().addOnSuccessListener {
                                                 Toast.makeText(activity.applicationContext, "Bir sorun oluştu", Toast.LENGTH_SHORT).show()
                                                 progress.value=false
                                             }
                                         }
                                     }
-                                }else{
-                                    Toast.makeText(activity.applicationContext, databaseResult.exception?.localizedMessage, Toast.LENGTH_SHORT).show()
-                                    progress.value=false
-                                }
+                            }.addOnFailureListener {
+                                Toast.makeText(activity.applicationContext, it.localizedMessage, Toast.LENGTH_SHORT).show()
+                                progress.value=false
                             }
                         }else{
                             progress.value=false

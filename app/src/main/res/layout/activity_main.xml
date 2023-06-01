@@ -14,15 +14,13 @@
         android:layout_height="match_parent"
         app:defaultNavHost="true"
         android:layout_above="@id/mainBottomMenu"
-        app:navGraph="@navigation/main_grapht"/>
+        app:navGraph="@navigation/profil_grapht"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainBottomMenu"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
-        android:background="@color/backgroundColor"
         app:menu="@menu/ana_menu"
-        app:itemIconTint="@color/white"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"/>
 

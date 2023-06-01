@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundColor"
+    android:orientation="horizontal">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:src="@drawable/profil_icon"
+        android:layout_marginStart="@dimen/_15sdp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="wrap_content"
+            android:text="demirtas52samet"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:textSize="@dimen/_11ssp"
+            android:singleLine="true"/>
+        <TextView
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="wrap_content"
+            android:text="Samet Demirtaş"
+            android:textColor="@color/gray"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:textSize="@dimen/_11ssp"
+            android:singleLine="true"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_25sdp"
+        android:text="Takip Et"
+        android:textAllCaps="false"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:textSize="@dimen/_8sdp"
+        android:background="@drawable/button_backgorund_gray_shape"
+        app:backgroundTint="@null"/>
+</LinearLayout>

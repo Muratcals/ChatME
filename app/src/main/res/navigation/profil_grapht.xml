@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_grapht"
+    app:startDestination="@id/proffilFragment">
+
+    <fragment
+        android:id="@+id/proffilFragment"
+        android:name="com.example.chatme.view.ProffilFragment"
+        android:label="fragment_proffil"
+        tools:layout="@layout/fragment_proffil" >
+        <action
+            android:id="@+id/action_proffilFragment_to_profilEditFragment"
+            app:destination="@id/profilEditFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/profilEditFragment"
+        android:name="com.example.chatme.view.ProfilEditFragment"
+        android:label="fragment_profil_edit"
+        tools:layout="@layout/fragment_profil_edit" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_profilEditFragment_to_profilEditDetailsFragment"
+            app:destination="@id/profilEditDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/profilEditDetailsFragment"
+        android:name="com.example.chatme.view.ProfilEditDetailsFragment"
+        android:label="fragment_profil_edit_details"
+        tools:layout="@layout/fragment_profil_edit_details" >
+        <argument
+            android:name="incoming"
+            app:argType="string" />
+    </fragment>
+</navigation>

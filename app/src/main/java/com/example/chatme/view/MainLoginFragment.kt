@@ -33,6 +33,17 @@ class MainLoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewModel.progress.observe(viewLifecycleOwner){
+            if (it){
+                binding.mainLoginProgress.visibility=View.VISIBLE
+                binding.mainScrollView.alpha=0.3F
+                binding.mainScrollView.isClickable=false
+            }else{
+                binding.mainLoginProgress.visibility=View.GONE
+                binding.mainScrollView.alpha=1F
+                binding.mainScrollView.isClickable=true
+            }
+        }
         if (auth.currentUser!=null){
             val intent = Intent(requireContext(),MainActivity::class.java)
             startActivity(intent)

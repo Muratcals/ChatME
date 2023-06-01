@@ -10,10 +10,14 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.chatme.R
 import com.example.chatme.databinding.FragmentProffilBinding
+import com.example.chatme.model.UserInformationModel
+import com.example.chatme.model.followedModel
+import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.viewmodel.ProffilViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -38,10 +42,18 @@ class ProffilFragment : Fragment() {
             if (it.isEmpty){
                 Toast.makeText(requireContext(), "Bir hata oluştu", Toast.LENGTH_SHORT).show()
             }else{
-                val result =it.documents
-                val name =result[0].get("name") as String
-                val authName=result[0].get("authName") as String
-                val biography =result[0].get("biography") as String
+                val result =it.toObjects(UserInformationModel::class.java)
+                val name =result[0].name
+                val authName=result[0].authName
+                val biography =result[0].biography
+                val imageUrl=result[0].profilImage
+                val follow =result[0].follow
+                val followed=result[0].followed
+                if (imageUrl.isNotEmpty()){
+                    binding.profilImage.downloadUrl(imageUrl)
+                }
+                binding.followCount.setText(follow.size.toString())
+                binding.followedCount.setText(followed.size.toString())
                 binding.profilUserName.setText(name)
                 binding.profilToolbar.toolbarUserAuthName.setText(authName)
                 binding.profilBiography.setText(biography)
@@ -55,7 +67,6 @@ class ProffilFragment : Fragment() {
         binding.profilEditButton.setOnClickListener {
             findNavController().navigate(R.id.action_proffilFragment_to_profilEditFragment)
         }
-
     }
 
 }

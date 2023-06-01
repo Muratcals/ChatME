@@ -18,6 +18,7 @@ class SplashActivity : AppCompatActivity() {
         if (auth.currentUser!=null){
             val intent =Intent(applicationContext,MainActivity::class.java)
             startActivity(intent)
+            this.finish()
         }else{
             dialog()
         }

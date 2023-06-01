@@ -2,16 +2,11 @@ package com.example.chatme
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import androidx.navigation.NavHostController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import com.example.chatme.databinding.ActivityMainBinding
 import com.example.chatme.model.MessageModel
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
 import java.util.UUID
@@ -29,7 +24,26 @@ class MainActivity : AppCompatActivity() {
         val uuid = UUID.randomUUID().variant()
         supportActionBar!!.hide()
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        binding.mainBottomMenu.setupWithNavController(navHostFragment.navController)
+        //binding.mainBottomMenu.setupWithNavController(navHostFragment.navController)
+        binding.mainBottomMenu.setOnItemSelectedListener {
+            when (it.itemId){
+                R.id.profilFragment->{
+                    findNavController(R.id.fragmentContainerView).setGraph(R.navigation.profil_grapht)
+                    true
+                }
+                R.id.homePageMenu->{
+                    findNavController(R.id.fragmentContainerView).setGraph(R.navigation.main_grapht)
+                    true
+                }
+                R.id.searchMenu->{
+                    findNavController(R.id.fragmentContainerView).setGraph(R.navigation.search_grahpt)
+                    true
+                }
+                else->{
+                    false
+                }
+            }
+        }
     }
     /*
            button.setOnClickListener {
