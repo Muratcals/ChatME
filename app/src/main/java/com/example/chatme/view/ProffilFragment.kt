@@ -11,10 +11,15 @@ import com.example.chatme.R
 import com.example.chatme.databinding.FragmentProffilBinding
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followedModel
+import com.example.chatme.util.utils.downloadUrl
+import com.example.chatme.util.utils.placeHolder
 import com.example.chatme.viewmodel.ProffilViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.type.DateTime
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -42,29 +47,33 @@ class ProffilFragment : Fragment() {
         arguments.let {
             val incoming =it?.getString("incoming")
             val mail=it?.getString("mail")
+            val authName=it?.getString("authName")
             if (incoming != null) {
-                viewModel.authFollowController(binding, mail!!)
+                viewModel.authFollowController(binding, mail!!,authName!!)
             } else {
                 binding.linearLayout4.visibility=View.GONE
                 binding.profilEditButton.visibility=View.VISIBLE
                 viewModel.authProfilInformation()
-
             }
             binding.profilEditButton.setOnClickListener {
                 findNavController().navigate(R.id.action_proffilFragment_to_profilEditFragment)
             }
             binding.follow.setOnClickListener {
+                val users =viewModel.authInformation.value
+                val currentUser=viewModel.currentUserInformation.value
                 if (binding.follow.text.equals("Takip Et")){
-                    val users =viewModel.authInformation.value
-                    val user = followedModel(users!!.customerId,users.authName,users.authName,users.profilImage)
-                    viewModel.authFollow(user)
-                    binding.follow.setBackgroundResource(R.drawable.button_background_shape)
-                    binding.follow.setText("Takip")
-                }else{
-                    val users =viewModel.authInformation.value
-                    val user = followedModel(users!!.customerId,users.authName,users.authName,users.profilImage)
-                    viewModel.authDeleteFollow(user)
+                    viewModel.authFollow(requireContext(),users!!,currentUser!!)
                     binding.follow.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
+                    binding.follow.setText("Bekleniyor")
+                }else if (binding.follow.text.equals("Takip")){
+                    val user = followedModel(users!!.customerId,users.authName,users.authName,users.profilImage,Timestamp.now())
+                    viewModel.authDeleteFollow(user,mail!!)
+                    binding.follow.setBackgroundResource(R.drawable.button_background_shape)
+                    binding.follow.setText("Takip Et")
+                }else if (binding.follow.text.equals("Bekleniyor")){
+                    val users =viewModel.authInformation.value
+                    viewModel.requestDeleteFollow(users!!,currentUser!!)
+                    binding.follow.setBackgroundResource(R.drawable.button_background_shape)
                     binding.follow.setText("Takip Et")
                 }
             }
@@ -101,5 +110,8 @@ class ProffilFragment : Fragment() {
         binding.profilBiography.setText(user.biography)
         binding.profilProgressBar.visibility = View.GONE
         binding.profilLayout.visibility = View.VISIBLE
+        if (user.profilImage.isNotEmpty()){
+            binding.profilImage.downloadUrl(user.profilImage, placeHolder(requireContext()))
+        }
     }
 }

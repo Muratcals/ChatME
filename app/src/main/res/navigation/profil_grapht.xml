@@ -15,6 +15,12 @@
             app:destination="@id/profilEditFragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
+        <argument
+            android:name="incoming"
+            app:argType="string" />
+        <argument
+            android:name="mail"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/profilEditFragment"

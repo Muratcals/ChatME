@@ -13,6 +13,7 @@ import com.example.chatme.R
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followedModel
 import com.example.chatme.util.utils.downloadUrl
+import com.example.chatme.util.utils.placeHolder
 import de.hdodenhof.circleimageview.CircleImageView
 
 class SearchRecyclerAdapter(
@@ -40,10 +41,10 @@ class SearchRecyclerAdapter(
 
     override fun onBindViewHolder(holder: SearchVH, position: Int) {
         if (searchItems[position].profilImage.isNotEmpty()){
-            holder.image.downloadUrl(searchItems[position].profilImage)
+            holder.image.downloadUrl(searchItems[position].profilImage, placeHolder(holder.itemView.context))
         }
         holder.searchLayout.setOnClickListener {
-            val bundle = bundleOf("incoming" to "search","mail" to searchItems[position].mail)
+            val bundle = bundleOf("incoming" to "search","mail" to searchItems[position].mail,"authName" to searchItems[position].authName)
             holder.itemView.findNavController().navigate(R.id.action_searchFragment_to_proffilFragment2,bundle)
         }
         holder.name.setText(searchItems[position].name)

@@ -6,7 +6,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.chatme.databinding.ActivityMainBinding
 import com.example.chatme.model.MessageModel
+import com.example.chatme.model.UserInformationModel
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
 import java.util.UUID
@@ -15,7 +18,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    @Inject lateinit var firebase: DatabaseReference
+    @Inject lateinit var database: FirebaseFirestore
+    @Inject lateinit var getAuth:FirebaseUser
     private lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +43,10 @@ class MainActivity : AppCompatActivity() {
                     findNavController(R.id.fragmentContainerView).setGraph(R.navigation.search_grahpt)
                     true
                 }
+                R.id.notification->{
+                    findNavController(R.id.fragmentContainerView).setGraph(R.navigation.notification_grapht)
+                    true
+                }
                 else->{
                     false
                 }
@@ -59,6 +67,8 @@ class MainActivity : AppCompatActivity() {
            }
 
             */
+
+    /*
     fun postMessage(uuid:String){
         val user = MessageModel(
             "murat",
@@ -73,4 +83,6 @@ class MainActivity : AppCompatActivity() {
             println(it.localizedMessage)
         }
     }
+
+     */
 }

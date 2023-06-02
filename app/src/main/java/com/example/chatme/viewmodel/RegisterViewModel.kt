@@ -26,18 +26,22 @@ class RegisterViewModel @Inject constructor(
                     if (it.signInMethods?.isEmpty()==true){
                         if (passwordController(activity.applicationContext,password)){
                             database.collection("User Information").document(userInformation.mail).set(userInformation).addOnSuccessListener { databaseResult->
-                                    auth.createUserWithEmailAndPassword(userInformation.mail,password).addOnCompleteListener { authResult->
-                                        if (authResult.isSuccessful){
-                                            Toast.makeText(activity.applicationContext, "Kayıt başarılı. Giriş yapabilirsin", Toast.LENGTH_SHORT).show()
-                                            progress.value=false
-                                            activity.finish()
-                                        }else{
-                                            database.collection("User Information").document(auth.currentUser!!.email.toString()).delete().addOnSuccessListener {
-                                                Toast.makeText(activity.applicationContext, "Bir sorun oluştu", Toast.LENGTH_SHORT).show()
+                                database.collection("User Information").document(userInformation.mail).get().addOnSuccessListener { references->
+                                    references.reference.collection("follow").add("").addOnSuccessListener {
+                                        auth.createUserWithEmailAndPassword(userInformation.mail,password).addOnCompleteListener { authResult->
+                                            if (authResult.isSuccessful){
+                                                Toast.makeText(activity.applicationContext, "Kayıt başarılı. Giriş yapabilirsin", Toast.LENGTH_SHORT).show()
                                                 progress.value=false
+                                                activity.finish()
+                                            }else{
+                                                database.collection("User Information").document(auth.currentUser!!.email.toString()).delete().addOnSuccessListener {
+                                                    Toast.makeText(activity.applicationContext, "Bir sorun oluştu", Toast.LENGTH_SHORT).show()
+                                                    progress.value=false
+                                                }
                                             }
                                         }
                                     }
+                                }
                             }.addOnFailureListener {
                                 Toast.makeText(activity.applicationContext, it.localizedMessage, Toast.LENGTH_SHORT).show()
                                 progress.value=false

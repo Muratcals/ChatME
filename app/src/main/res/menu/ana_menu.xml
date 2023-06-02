@@ -3,6 +3,6 @@
 <item android:id="@+id/homePageMenu" android:title="" android:enabled="true" android:icon="@drawable/main_icon" />
     <item android:id="@+id/searchMenu" android:icon="@drawable/search_icon" android:title=""/>
     <item android:id="@+id/addPhoto" android:icon="@drawable/add_icon" android:title=""/>
+    <item android:id="@+id/notification" android:title="" android:icon="@drawable/heart_icon"/>
     <item android:title="" android:id="@+id/profilFragment" android:icon="@drawable/profile_icon"/>
-
 </menu>

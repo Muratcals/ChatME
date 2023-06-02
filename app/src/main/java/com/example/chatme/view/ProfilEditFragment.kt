@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -22,8 +23,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.chatme.R
 import com.example.chatme.databinding.FragmentProfilEditBinding
 import com.example.chatme.util.utils.downloadUrl
+import com.example.chatme.util.utils.placeHolder
 import com.example.chatme.viewmodel.ProfilEditViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +41,7 @@ class ProfilEditFragment : Fragment() {
     @Inject
     lateinit var viewModel: ProfilEditViewModel
     @Inject lateinit var auth: FirebaseAuth
+    @Inject lateinit var getAuth:FirebaseUser
     @Inject lateinit var database:FirebaseFirestore
     private lateinit var binding: FragmentProfilEditBinding
     @Inject lateinit var storage:FirebaseStorage
@@ -62,7 +66,7 @@ class ProfilEditFragment : Fragment() {
                 val gender =result[0].get("gender") as String
                 val imageUrl=result[0].get("profilImage") as String
                 if (imageUrl.isNotEmpty()){
-                    binding.editImage.downloadUrl(imageUrl)
+                    binding.editImage.downloadUrl(imageUrl, placeHolder(requireContext()))
                 }
                 binding.authNameText.setText(authName)
                 binding.genderText.setText(gender)
@@ -119,14 +123,26 @@ class ProfilEditFragment : Fragment() {
     }
 
     fun buttonEnabled(state:Boolean){
-        if (state){
-            binding.profilProgress.visibility=View.INVISIBLE
-            binding.profilLinearLayout.isClickable=true
-            binding.profilLinearLayout.isEnabled=true
-        }else{
+        if (!state){
             binding.profilProgress.visibility=View.VISIBLE
-            binding.profilLinearLayout.isClickable=false
-            binding.profilLinearLayout.isEnabled=false
+            binding.nameText.isClickable=false
+            binding.biographyText.isClickable=false
+            binding.genderText.isClickable=false
+            binding.authNameText.isClickable=false
+            binding.nameText.isEnabled=false
+            binding.biographyText.isEnabled=false
+            binding.genderText.isEnabled=false
+            binding.authNameText.isEnabled=false
+        }else{
+            binding.profilProgress.visibility=View.INVISIBLE
+            binding.nameText.isClickable=true
+            binding.biographyText.isClickable=true
+            binding.genderText.isClickable=true
+            binding.authNameText.isClickable=true
+            binding.nameText.isEnabled=true
+            binding.biographyText.isEnabled=true
+            binding.genderText.isEnabled=true
+            binding.authNameText.isEnabled=true
         }
 
     }
@@ -145,19 +161,10 @@ class ProfilEditFragment : Fragment() {
                 val reference=storage.getReference(uuid)
                 reference.putFile(compressUri).addOnSuccessListener { imageTask->
                     imageTask.storage.downloadUrl.addOnSuccessListener { uri->
-                        database.collection("User Information").whereEqualTo("mail",auth.currentUser!!.email.toString()).get().addOnSuccessListener {
-                            if (it!=null){
-                                database.collection("User Information").document(it.documents[0].id).update("profilImage",uri.toString()).addOnSuccessListener {
-                                    Toast.makeText(requireContext(), "Profil resmi güncellendi.", Toast.LENGTH_SHORT).show()
-                                   buttonEnabled(true)
-                                }.addOnFailureListener {
-                                    reference.delete().addOnSuccessListener {
-                                       buttonEnabled(true)
-                                    }.addOnFailureListener {
-                                        println(it.localizedMessage)
-                                    }
-                                }
-                            }
+                        database.collection("User Information").document(getAuth.email.toString()).update("profilImage",uri.toString()).addOnSuccessListener {
+                            Toast.makeText(requireContext(), "Profil resmi güncellendi.", Toast.LENGTH_SHORT).show()
+                            requireActivity().onBackPressed()
+                            buttonEnabled(true)
                         }.addOnFailureListener {
                             reference.delete().addOnSuccessListener {
                                buttonEnabled(true)
