@@ -9,11 +9,11 @@
     tools:context=".view.ProffilFragment">
 
     <LinearLayout
+        android:id="@+id/profilLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profilLayout"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -156,23 +156,66 @@
 
         </LinearLayout>
 
-        <LinearLayout
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <Button
+                    android:id="@+id/follow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    app:backgroundTint="@null"
+                    android:background="@drawable/button_background_shape"
+                    android:text="Takip Et"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_11ssp" />
+
+                <Button
+                    android:id="@+id/message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_background_shape"
+                    android:text="Mesaj Gönder"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/profilEditButton"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/button_background_shape"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="Profili Düzenle"
                 android:textAllCaps="false"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_11ssp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/userImagesRecycler"
@@ -181,6 +224,7 @@
             android:layout_marginVertical="@dimen/_10sdp"
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp"
+
             tools:ignore="RtlSymmetry" />
     </LinearLayout>
 

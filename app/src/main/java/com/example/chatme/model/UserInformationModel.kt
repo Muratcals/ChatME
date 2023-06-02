@@ -8,18 +8,4 @@ class UserInformationModel(
     val gender: String = "",
     val biography: String = "",
     val profilImage: String = "",
-    val follow: List<followedModel> = emptyList(),
-    val followed: List<followedModel> = emptyList()
-) {
-    constructor() : this(
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        emptyList(),
-        emptyList()
-    )
-}
+)

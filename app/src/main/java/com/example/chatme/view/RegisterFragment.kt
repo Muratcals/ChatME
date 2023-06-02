@@ -64,9 +64,7 @@ class RegisterFragment : Fragment() {
                     binding.registerUserName.text.toString(),
                     gender,
                     biography = "",
-                    "",
-                    arrayListOf(),
-                    arrayListOf()
+                    ""
                 )
                 viewModel.createUser(
                     requireActivity(),

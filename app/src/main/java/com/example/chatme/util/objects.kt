@@ -1,6 +1,7 @@
 package com.example.chatme.util
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,6 +24,11 @@ object objects {
         return FirebaseAuth.getInstance()
     }
 
+    @Provides
+    @Singleton
+    fun getAuth(): FirebaseUser {
+        return FirebaseAuth.getInstance().currentUser!!
+    }
     @Provides
     @Singleton
     fun messageRoom():DatabaseReference{

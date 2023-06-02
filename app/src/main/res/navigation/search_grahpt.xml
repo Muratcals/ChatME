@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/search_grahpt">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_grahpt"
+    app:startDestination="@id/searchFragment">
 
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.chatme.view.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_proffilFragment2"
+            app:destination="@id/proffilFragment2"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/proffilFragment2"
+        android:name="com.example.chatme.view.ProffilFragment"
+        android:label="fragment_proffil"
+        tools:layout="@layout/fragment_proffil" >
+        <argument
+            android:name="incoming"
+            app:argType="string" />
+        <argument
+            android:name="mail"
+            app:argType="string" />
+    </fragment>
 </navigation>
