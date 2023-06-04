@@ -11,21 +11,19 @@
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_searchFragment_to_proffilFragment2"
-            app:destination="@id/proffilFragment2"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            android:id="@+id/action_searchFragment_to_searchProfilFragment"
+            app:destination="@id/searchProfilFragment" />
     </fragment>
     <fragment
-        android:id="@+id/proffilFragment2"
-        android:name="com.example.chatme.view.ProffilFragment"
-        android:label="fragment_proffil"
-        tools:layout="@layout/fragment_proffil" >
-        <argument
-            android:name="incoming"
-            app:argType="string" />
+        android:id="@+id/searchProfilFragment"
+        android:name="com.example.chatme.view.SearchProfilFragment"
+        android:label="fragment_search_profil"
+        tools:layout="@layout/fragment_search_profil" >
         <argument
             android:name="mail"
+            app:argType="string" />
+        <argument
+            android:name="authName"
             app:argType="string" />
     </fragment>
 </navigation>

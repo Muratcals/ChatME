@@ -6,20 +6,19 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
     android:orientation="vertical"
-    tools:context=".view.ProffilFragment">
+    tools:context=".view.SearchProfilFragment">
 
     <LinearLayout
-        android:id="@+id/profilLayout"
+        android:id="@+id/searchLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <include
-            android:id="@+id/profilToolbar"
+            android:id="@+id/searchToolbar"
             layout="@layout/profil_toolbar" />
 
         <LinearLayout
@@ -29,12 +28,11 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profilImage"
+                android:id="@+id/searchImage"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_90sdp"
                 android:layout_weight="7"
-                android:layout_marginBottom="@dimen/_5sdp"
-                android:src="@drawable/profile_icon" />
+                android:layout_marginBottom="@dimen/_5sdp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -56,7 +54,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/shareCount"
+                            android:id="@+id/searchShareCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -81,7 +79,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/followCount"
+                            android:id="@+id/searchFollowCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -106,7 +104,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/followedCount"
+                            android:id="@+id/searchFollowedCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -136,7 +134,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/profilUserName"
+                android:id="@+id/searchUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_15sdp"
@@ -146,7 +144,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/profilBiography"
+                android:id="@+id/searchBiography"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_15sdp"
@@ -157,30 +155,43 @@
 
         </LinearLayout>
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/profilEditButton"
+            <LinearLayout
+                android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:background="@drawable/button_background_shape"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:text="Profili Düzenle"
-                android:textAllCaps="false"
-                android:textSize="@dimen/_11ssp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:layout_marginTop="@dimen/_10sdp">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/follow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    app:backgroundTint="@null"
+                    android:background="@drawable/button_background_shape"
+                    android:text="Takip Et"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_11ssp" />
+
+                <Button
+                    android:id="@+id/message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_background_shape"
+                    android:text="Mesaj Gönder"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userImagesRecycler"
+            android:id="@+id/searchUserImagesRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/_10sdp"
@@ -191,7 +202,7 @@
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/profilProgressBar"
+        android:id="@+id/searchProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

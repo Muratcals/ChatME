@@ -1,9 +1,19 @@
 package com.example.chatme
 
+import android.app.AlarmManager
+import android.app.AlertDialog
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.format.DateFormat
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.chatme.databinding.ActivityMainBinding
 import com.example.chatme.model.MessageModel
 import com.example.chatme.model.UserInformationModel
@@ -12,6 +22,8 @@ import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalTime
+import java.util.Calendar
+import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 
@@ -28,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         val uuid = UUID.randomUUID().variant()
         supportActionBar!!.hide()
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        //binding.mainBottomMenu.setupWithNavController(navHostFragment.navController)
+        binding.mainBottomMenu.setupWithNavController(navHostFragment.navController)
         binding.mainBottomMenu.setOnItemSelectedListener {
             when (it.itemId){
                 R.id.profilFragment->{
@@ -53,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     /*
            button.setOnClickListener {
                firebase.orderByChild("receivingTheMessage").equalTo("murat").get().addOnSuccessListener { snapshot->

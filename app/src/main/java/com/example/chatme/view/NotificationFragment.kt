@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.example.chatme.R
 import com.example.chatme.databinding.FragmentNotificationBinding
 import com.example.chatme.viewmodel.NotificationViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,12 +29,16 @@ class NotificationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getFollowRequestData()
+        val adapter =
         viewModel.followRequest.observe(viewLifecycleOwner){
-            if (it.size>1){
+            if (it?.size!! >1){
                 binnding.followRequestName.setText("${it[0].name} + ${it.size-1} diğer")
-            }else{
+            }else if (!it.isEmpty()){
                 binnding.followRequestName.setText(it[0].name)
             }
+        }
+        binnding.viewRequestButton.setOnClickListener {
+            findNavController().navigate(R.id.action_notificationFragment_to_followRequestFragment)
         }
     }
 }

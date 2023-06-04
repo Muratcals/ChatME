@@ -18,8 +18,4 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">false</item>
     </style>
-
-    <style name="Theme.ChatME.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.ChatME.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

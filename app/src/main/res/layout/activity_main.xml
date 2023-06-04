@@ -7,6 +7,7 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -17,10 +18,14 @@
         app:navGraph="@navigation/search_grahpt"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:backgroundTint="@color/backgroundColor"
+        app:itemIconTint="@color/white"
         android:id="@+id/mainBottomMenu"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_35sdp"
+        android:layout_height="wrap_content"
         app:menu="@menu/ana_menu"
+        android:animateLayoutChanges="true"
+        android:animationCache="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"/>
 

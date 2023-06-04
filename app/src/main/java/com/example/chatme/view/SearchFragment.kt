@@ -1,5 +1,8 @@
 package com.example.chatme.view
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -35,20 +38,21 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         repository.getAllUser()
-        var adapter =SearchRecyclerAdapter(arrayListOf())
+        val adapter =SearchRecyclerAdapter(arrayListOf())
         binding.searchRecycler.adapter=adapter
         binding.searchRecycler.layoutManager=LinearLayoutManager(requireContext())
         repository.authList.observe(viewLifecycleOwner){ list->
             binding.searcEdittext.addTextChangedListener {
                 val adapterList=ArrayList<UserInformationModel>()
                 for (item in list){
-                    if (item.authName.contains(it.toString())){
+                    if (item.authName.toUpperCase().contains(it.toString().toUpperCase())){
                         adapterList.add(item)
                     }
                 }
-                adapter =SearchRecyclerAdapter(adapterList)
-                binding.searchRecycler.adapter=adapter
+                adapter.updateData(adapterList)
             }
         }
     }
+
+
 }

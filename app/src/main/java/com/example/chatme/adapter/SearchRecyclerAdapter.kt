@@ -8,10 +8,12 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatme.R
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followedModel
+import com.example.chatme.util.CallbackRecycler
 import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.util.utils.placeHolder
 import de.hdodenhof.circleimageview.CircleImageView
@@ -44,10 +46,17 @@ class SearchRecyclerAdapter(
             holder.image.downloadUrl(searchItems[position].profilImage, placeHolder(holder.itemView.context))
         }
         holder.searchLayout.setOnClickListener {
-            val bundle = bundleOf("incoming" to "search","mail" to searchItems[position].mail,"authName" to searchItems[position].authName)
-            holder.itemView.findNavController().navigate(R.id.action_searchFragment_to_proffilFragment2,bundle)
+            val bundle = bundleOf("mail" to searchItems[position].mail,"authName" to searchItems[position].authName)
+            holder.itemView.findNavController().navigate(R.id.action_searchFragment_to_searchProfilFragment,bundle)
         }
         holder.name.setText(searchItems[position].name)
         holder.authName.setText(searchItems[position].authName)
+    }
+
+    fun updateData(newList:List<UserInformationModel>){
+        val diffCallback=CallbackRecycler(searchItems,newList)
+        val diffResult =DiffUtil.calculateDiff(diffCallback)
+        diffResult.dispatchUpdatesTo(this)
+        searchItems=newList
     }
 }

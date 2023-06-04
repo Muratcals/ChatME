@@ -3,9 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/backgroundColor">
+    android:background="@color/backgroundColor"
+    android:paddingTop="@dimen/_10sdp">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/requestImage"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
         android:src="@drawable/profil_icon"
@@ -18,6 +20,7 @@
         android:layout_gravity="center_vertical">
 
         <TextView
+            android:id="@+id/requestAuthName"
             android:layout_width="@dimen/_70sdp"
             android:layout_height="wrap_content"
             android:text="codewithos"
@@ -27,6 +30,7 @@
             android:textSize="@dimen/_11ssp"
             android:singleLine="true"/>
         <TextView
+            android:id="@+id/requestName"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="wrap_content"
             android:text="Samet Demirtaş"
@@ -37,35 +41,53 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_25sdp"
-            android:text="Onayla"
-            android:layout_weight="1"
-            android:textAllCaps="false"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:textSize="@dimen/_8sdp"
-            android:background="@drawable/button_background_shape"
-            app:backgroundTint="@null"/>
+        <ProgressBar
+            android:id="@+id/requestRecyclerProgress"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/requestSuccessButton"
+            app:layout_constraintStart_toStartOf="@+id/requestSuccessButton"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:layout_width="0dp"
+            android:id="@+id/requestSuccessButton"
+            android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_25sdp"
-            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/button_background_shape"
+            android:text="Onayla"
             android:layout_marginStart="@dimen/_10sdp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/_7sdp"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/requestDeleteButton"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@drawable/button_backgorund_gray_shape"
             android:text="Sil"
             android:textAllCaps="false"
-            android:textSize="@dimen/_8sdp"
-            app:backgroundTint="@null" />
-    </LinearLayout>
+            android:textSize="@dimen/_7sdp"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

@@ -3,7 +3,7 @@ package com.example.chatme.model
 import com.google.firebase.Timestamp
 
 data class followedModel(
-    val customerId: String = "",
+    val mail: String = "",
     val name: String = "",
     val authName: String = "",
     val imageUrl: String = "",

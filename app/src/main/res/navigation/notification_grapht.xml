@@ -9,5 +9,14 @@
         android:id="@+id/notificationFragment"
         android:name="com.example.chatme.view.NotificationFragment"
         android:label="fragment_notification"
-        tools:layout="@layout/fragment_notification" />
+        tools:layout="@layout/fragment_notification" >
+        <action
+            android:id="@+id/action_notificationFragment_to_followRequestFragment"
+            app:destination="@id/followRequestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followRequestFragment"
+        android:name="com.example.chatme.view.FollowRequestFragment"
+        android:label="fragment_follow_request"
+        tools:layout="@layout/fragment_follow_request" />
 </navigation>

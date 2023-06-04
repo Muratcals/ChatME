@@ -21,6 +21,7 @@ class MainLoginViewModel @Inject constructor(
     val progress =MutableLiveData<Boolean>()
     fun loginUser(activity: Activity, userName:String, password:String){
         progress.value=true
+        println(userName)
         database.collection("User Information").whereEqualTo("authName",userName).get().addOnSuccessListener {
             if (it.isEmpty){
                 progress.value=false

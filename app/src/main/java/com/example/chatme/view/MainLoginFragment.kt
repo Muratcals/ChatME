@@ -37,11 +37,25 @@ class MainLoginFragment : Fragment() {
             if (it){
                 binding.mainLoginProgress.visibility=View.VISIBLE
                 binding.mainScrollView.alpha=0.3F
-                binding.mainScrollView.isClickable=false
+                binding.loginButton.isClickable=false
+                binding.loginUserName.isClickable=false
+                binding.loginPassword.isClickable=false
+                binding.resetPassword.isClickable=false
+                binding.loginButton.isEnabled=false
+                binding.loginUserName.isEnabled=false
+                binding.loginPassword.isEnabled=false
+                binding.resetPassword.isEnabled=false
             }else{
                 binding.mainLoginProgress.visibility=View.GONE
                 binding.mainScrollView.alpha=1F
-                binding.mainScrollView.isClickable=true
+                binding.loginButton.isClickable=true
+                binding.loginUserName.isClickable=true
+                binding.loginPassword.isClickable=true
+                binding.resetPassword.isClickable=true
+                binding.loginButton.isEnabled=true
+                binding.loginUserName.isEnabled=true
+                binding.loginPassword.isEnabled=true
+                binding.resetPassword.isEnabled=true
             }
         }
         if (auth.currentUser!=null){
