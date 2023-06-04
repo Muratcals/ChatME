@@ -19,9 +19,10 @@ class NotificationViewModel @Inject constructor(
     val followRequest =MutableLiveData<List<followNotificationModel>?>()
     val notification=MutableLiveData<List<followNotificationModel>?>()
     val progress=MutableLiveData<Boolean>()
+    private val  currentUser=database.collection("User Information").document(getAuth.email.toString())
     fun getFollowRequestData(){
         progress.value=true
-        database.collection("User Information").document(getAuth.email.toString()).
+        currentUser.
         collection("notification").whereEqualTo("state",false).addSnapshotListener { value, error ->
             val followedModel =value?.toObjects(followNotificationModel::class.java)
             followRequest.value=followedModel
@@ -30,7 +31,7 @@ class NotificationViewModel @Inject constructor(
     }
 
     fun getAllNotification(){
-        database.collection("User Information").document(getAuth.email.toString()).
+        currentUser.
         collection("notification").addSnapshotListener { value, error ->
             val followedModel =value?.toObjects(followNotificationModel::class.java)
             notification.value=followedModel
@@ -38,7 +39,7 @@ class NotificationViewModel @Inject constructor(
     }
 
     fun getNotification(){
-        database.collection("User Information").document(getAuth.email.toString()).collection("notification").addSnapshotListener { value, error ->
+        currentUser.collection("notification").addSnapshotListener { value, error ->
             if (value!=null){
                 notification.value=value.toObjects(followNotificationModel::class.java)
             }

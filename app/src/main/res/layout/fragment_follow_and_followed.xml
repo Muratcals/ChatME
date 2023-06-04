@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.FollowAndFollowedFragment">
+    tools:context=".view.FollowAndFollowedFragment"
+    android:background="@color/black"
+    android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/followAndFollowedLayout"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:orientation="vertical">
 
-</FrameLayout>
+        <include layout="@layout/profil_edit_details_toolbar" android:id="@+id/followAndFolloToolbar"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/followAndFollowRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"/>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/followAndFollowedLayoutProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.example.chatme.R
 import com.example.chatme.databinding.FragmentProffilBinding
@@ -48,6 +49,14 @@ class ProffilFragment : Fragment() {
         binding.profilEditButton.setOnClickListener {
             findNavController().navigate(R.id.action_proffilFragment_to_profilEditFragment)
         }
+        binding.followLayout.setOnClickListener {
+            val bundle = bundleOf("authName" to viewModel.authInformation.value!!.authName,"incoming" to "follow")
+            findNavController().navigate(R.id.action_proffilFragment_to_followAndFollowedFragment,bundle)
+        }
+        binding.followedLayout.setOnClickListener {
+            val bundle = bundleOf("authName" to viewModel.authInformation.value!!.authName,"incoming" to "followed")
+            findNavController().navigate(R.id.action_proffilFragment_to_followAndFollowedFragment,bundle)
+        }
     }
 
     fun observerItem(){
@@ -71,6 +80,7 @@ class ProffilFragment : Fragment() {
                 binding.profilLayout.visibility = View.VISIBLE
             }
         }
+
     }
 
     fun updateUI(user: UserInformationModel) {

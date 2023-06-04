@@ -14,7 +14,7 @@
 
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/followImage"
+        android:id="@+id/followAndFollowedImage"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
         android:src="@drawable/profil_icon"
@@ -28,7 +28,7 @@
         android:layout_marginEnd="@dimen/_10sdp">
 
         <TextView
-            android:id="@+id/followAuthName"
+            android:id="@+id/followAndFollowedAuthName"
             android:layout_width="@dimen/_130sdp"
             android:layout_height="wrap_content"
             android:text="demirtas52samet"
@@ -38,7 +38,7 @@
             android:textSize="@dimen/_11ssp" />
 
         <TextView
-            android:id="@+id/followname"
+            android:id="@+id/followAndFollowedName"
             android:layout_width="@dimen/_130sdp"
             android:layout_height="wrap_content"
             android:text="demirtas52samet"
@@ -49,19 +49,38 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/followButton"
-        android:layout_width="0dp"
-        android:layout_weight="5"
-        android:layout_height="@dimen/_25sdp"
-        android:text="Takip Et"
-        android:textAllCaps="false"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        android:textSize="@dimen/_8sdp"
-        android:background="@drawable/button_backgorund_gray_shape"
-        app:backgroundTint="@null"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="5">
+
+            <ProgressBar
+                android:id="@+id/followAndFollowedProgress"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/followAndFollowedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_25sdp"
+                android:background="@drawable/button_background_shape"
+                android:text="Takip Et"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_8sdp"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     </LinearLayout>
 </LinearLayout>

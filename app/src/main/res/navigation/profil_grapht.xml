@@ -21,6 +21,9 @@
         <argument
             android:name="mail"
             app:argType="string" />
+        <action
+            android:id="@+id/action_proffilFragment_to_followAndFollowedFragment"
+            app:destination="@id/followAndFollowedFragment" />
     </fragment>
     <fragment
         android:id="@+id/profilEditFragment"
@@ -41,6 +44,18 @@
         android:name="com.example.chatme.view.ProfilEditDetailsFragment"
         android:label="fragment_profil_edit_details"
         tools:layout="@layout/fragment_profil_edit_details" >
+        <argument
+            android:name="incoming"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/followAndFollowedFragment"
+        android:name="com.example.chatme.view.FollowAndFollowedFragment"
+        android:label="fragment_follow_and_followed"
+        tools:layout="@layout/fragment_follow_and_followed" >
+        <argument
+            android:name="authName"
+            app:argType="string" />
         <argument
             android:name="incoming"
             app:argType="string" />
