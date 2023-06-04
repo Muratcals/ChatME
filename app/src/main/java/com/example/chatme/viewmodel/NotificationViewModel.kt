@@ -16,13 +16,24 @@ class NotificationViewModel @Inject constructor(
     val getAuth:FirebaseUser
 ) : ViewModel() {
 
-    val followRequest =MutableLiveData<List<followedModel>?>()
-    val notification=MutableLiveData<List<followNotificationModel>>()
+    val followRequest =MutableLiveData<List<followNotificationModel>?>()
+    val notification=MutableLiveData<List<followNotificationModel>?>()
+    val progress=MutableLiveData<Boolean>()
     fun getFollowRequestData(){
+        progress.value=true
         database.collection("User Information").document(getAuth.email.toString()).
-        collection("request").whereEqualTo("bool",false).addSnapshotListener { value, error ->
-            val followedModel =value?.toObjects(followedModel::class.java)
+        collection("notification").whereEqualTo("state",false).addSnapshotListener { value, error ->
+            val followedModel =value?.toObjects(followNotificationModel::class.java)
             followRequest.value=followedModel
+            progress.value=false
+        }
+    }
+
+    fun getAllNotification(){
+        database.collection("User Information").document(getAuth.email.toString()).
+        collection("notification").addSnapshotListener { value, error ->
+            val followedModel =value?.toObjects(followNotificationModel::class.java)
+            notification.value=followedModel
         }
     }
 

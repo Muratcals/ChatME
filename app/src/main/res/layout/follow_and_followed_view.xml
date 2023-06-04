@@ -4,48 +4,64 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/backgroundColor"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="@dimen/_5sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
+        android:id="@+id/followImage"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
         android:src="@drawable/profil_icon"
-        android:layout_marginStart="@dimen/_15sdp" />
+        android:layout_marginStart="@dimen/_5sdp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="@dimen/_10sdp">
 
         <TextView
-            android:layout_width="@dimen/_70sdp"
+            android:id="@+id/followAuthName"
+            android:layout_width="@dimen/_130sdp"
             android:layout_height="wrap_content"
             android:text="demirtas52samet"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_marginStart="@dimen/_10sdp"
-            android:textSize="@dimen/_11ssp"
-            android:singleLine="true"/>
+            android:textSize="@dimen/_11ssp" />
+
         <TextView
-            android:layout_width="@dimen/_70sdp"
+            android:id="@+id/followname"
+            android:layout_width="@dimen/_130sdp"
             android:layout_height="wrap_content"
-            android:text="Samet Demirtaş"
+            android:text="demirtas52samet"
+            android:textStyle="normal"
             android:textColor="@color/gray"
             android:layout_marginStart="@dimen/_10sdp"
-            android:textSize="@dimen/_11ssp"
-            android:singleLine="true"/>
+            android:textSize="@dimen/_11ssp" />
 
     </LinearLayout>
 
     <Button
-        android:layout_width="@dimen/_120sdp"
+        android:id="@+id/followButton"
+        android:layout_width="0dp"
+        android:layout_weight="5"
         android:layout_height="@dimen/_25sdp"
         android:text="Takip Et"
         android:textAllCaps="false"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:textSize="@dimen/_8sdp"
         android:background="@drawable/button_backgorund_gray_shape"
         app:backgroundTint="@null"/>
+
+    </LinearLayout>
 </LinearLayout>

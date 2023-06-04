@@ -52,41 +52,79 @@
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/requestSuccessButton"
-            app:layout_constraintStart_toStartOf="@+id/requestSuccessButton"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/requestSuccessButton"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_weight="1"
-            android:background="@drawable/button_background_shape"
-            android:text="Onayla"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:textAllCaps="false"
-            android:textSize="@dimen/_7sdp"
-            app:backgroundTint="@null"
+            android:layout_marginStart="@dimen/_30sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/requestDeleteButton"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:background="@drawable/button_backgorund_gray_shape"
-            android:text="Sil"
-            android:textAllCaps="false"
-            android:textSize="@dimen/_7sdp"
-            app:backgroundTint="@null"
+        <LinearLayout
+            android:id="@+id/requestFollowButtonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:visibility="gone"
+            android:layout_marginHorizontal="@dimen/_25sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/requestFollowButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_25sdp"
+                android:background="@drawable/button_background_shape"
+                android:text="Sende onu takip et"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_7sdp"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/requestButtonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/requestSuccessButton"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="@drawable/button_background_shape"
+                android:text="Onayla"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_7sdp"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/requestDeleteButton"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="@drawable/button_backgorund_gray_shape"
+                android:text="Sil"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_7sdp"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

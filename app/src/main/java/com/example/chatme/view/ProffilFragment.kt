@@ -46,9 +46,8 @@ class ProffilFragment : Fragment() {
         observerItem()
         viewModel.authProfilInformation()
         binding.profilEditButton.setOnClickListener {
-                findNavController().navigate(R.id.action_proffilFragment_to_profilEditFragment)
+            findNavController().navigate(R.id.action_proffilFragment_to_profilEditFragment)
         }
-
     }
 
     fun observerItem(){

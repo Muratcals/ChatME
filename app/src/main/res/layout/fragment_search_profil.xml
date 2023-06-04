@@ -161,32 +161,50 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:visibility="visible"
+                android:gravity="center"
                 android:layout_marginTop="@dimen/_10sdp">
 
-                <Button
-                    android:id="@+id/follow"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    app:backgroundTint="@null"
-                    android:background="@drawable/button_background_shape"
-                    android:text="Takip Et"
-                    android:textAllCaps="false"
-                    android:textSize="@dimen/_11ssp" />
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/follow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_background_shape"
+                        android:text="Takip Et"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/_10ssp"
+                        app:backgroundTint="@null"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/searchSuccessProgress"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/follow" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <Button
                     android:id="@+id/message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_weight="1"
                     android:background="@drawable/button_background_shape"
                     android:text="Mesaj Gönder"
                     android:textAllCaps="false"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
 

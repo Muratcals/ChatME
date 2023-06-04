@@ -1,5 +1,7 @@
 package com.example.chatme.view
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -45,16 +47,32 @@ class SearchProfilFragment : Fragment() {
             binding.follow.setOnClickListener {
                 val users =viewModel.authInformation.value
                 val currentUser=viewModel.currentUserInformation.value
+                if (binding.follow.text.equals("Onayla")){
+                    viewModel.reFollow(binding,users!!)
+                    binding.follow.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
+                    binding.follow.setText("Takip")
+                }
                 if (binding.follow.text.equals("Takip Et")){
                     viewModel.authFollow(requireContext(),users!!,currentUser!!)
                     binding.follow.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
                     binding.follow.setText("Bekleniyor")
                 }else if (binding.follow.text.equals("Takip")){
-                    val user = followedModel(users!!.customerId,users.authName,users.authName,users.profilImage,
-                        Timestamp.now())
-                    viewModel.authDeleteFollow(user,mail!!)
-                    binding.follow.setBackgroundResource(R.drawable.button_background_shape)
-                    binding.follow.setText("Takip Et")
+                    val builder=AlertDialog.Builder(requireContext())
+                    builder.setTitle("Takipten çık")
+                    builder.setMessage("Takipten çıkmak istediğinize emin misiniz")
+                    builder.setPositiveButton("Çık") { dialog, which ->
+                        val user = followedModel(
+                            users!!.customerId, users.authName, users.authName, users.profilImage,
+                            Timestamp.now()
+                        )
+                        viewModel.authDeleteFollow(binding,user, mail, authName)
+                        binding.follow.setBackgroundResource(R.drawable.button_background_shape)
+                        binding.follow.setText("Takip Et")
+                    }
+                    builder.setNegativeButton("İptal") { dialog, which ->
+                        dialog.cancel()
+                    }
+                    builder.show()
                 }else if (binding.follow.text.equals("Bekleniyor")){
                     val users =viewModel.authInformation.value
                     viewModel.requestDeleteFollow(users!!,currentUser!!)
