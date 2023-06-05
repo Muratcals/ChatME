@@ -15,12 +15,6 @@
             app:destination="@id/profilEditFragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
-        <argument
-            android:name="incoming"
-            app:argType="string" />
-        <argument
-            android:name="mail"
-            app:argType="string" />
         <action
             android:id="@+id/action_proffilFragment_to_followAndFollowedFragment"
             app:destination="@id/followAndFollowedFragment" />
@@ -56,6 +50,33 @@
         <argument
             android:name="authName"
             app:argType="string" />
+        <argument
+            android:name="incoming"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_followAndFollowedFragment_to_proffilFragment"
+            app:destination="@id/proffilFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_followAndFollowedFragment_to_searchProfilFragment2"
+            app:destination="@id/searchProfilFragment2"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchProfilFragment2"
+        android:name="com.example.chatme.view.SearchProfilFragment"
+        android:label="fragment_search_profil"
+        tools:layout="@layout/fragment_search_profil" >
+        <argument android:name="mail"
+            app:argType="string" />
+        <argument
+            android:name="authName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_searchProfilFragment2_to_followAndFollowedFragment"
+            app:destination="@id/followAndFollowedFragment" />
         <argument
             android:name="incoming"
             app:argType="string" />

@@ -11,6 +11,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateFormat
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -39,32 +40,42 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val uuid = UUID.randomUUID().variant()
         supportActionBar!!.hide()
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        binding.mainBottomMenu.setupWithNavController(navHostFragment.navController)
-        binding.mainBottomMenu.setOnItemSelectedListener {
-            when (it.itemId){
-                R.id.profilFragment->{
-                    findNavController(R.id.fragmentContainerView).setGraph(R.navigation.profil_grapht)
-                    true
+        binding.mainBottomMenu.setOnItemSelectedListener { menuItem ->
+            handleNavigation(menuItem.itemId)
+            true
+        }
+    }
+    private fun handleNavigation(itemId: Int) {
+        val navController = findNavController(R.id.fragmentContainerView)
+        val currentDestination = navController.currentDestination?.id
+        println(currentDestination.toString())
+        when (itemId) {
+            R.id.profilFragment -> {
+                println(R.id.proffilFragment)
+                // Eğer şu anki hedef "profilFragment" ise yenileme işlemi yapma
+                if (currentDestination!=R.id.proffilFragment) {
+                    navController.setGraph(R.navigation.profil_grapht)
                 }
-                R.id.homePageMenu->{
-                    findNavController(R.id.fragmentContainerView).setGraph(R.navigation.main_grapht)
-                    true
+            }
+            R.id.homePageMenu -> {
+                if (currentDestination != R.id.homePageMenu) {
+                    navController.setGraph(R.navigation.main_grapht)
                 }
-                R.id.searchMenu->{
-                    findNavController(R.id.fragmentContainerView).setGraph(R.navigation.search_grahpt)
-                    true
+            }
+            R.id.searchMenu -> {
+                if (currentDestination != R.id.searchFragment) {
+                    navController.setGraph(R.navigation.search_grahpt)
                 }
-                R.id.notification->{
-                    findNavController(R.id.fragmentContainerView).setGraph(R.navigation.notification_grapht)
-                    true
-                }
-                else->{
-                    false
+            }
+            R.id.notification -> {
+                if (currentDestination != R.id.notificationFragment) {
+                    navController.setGraph(R.navigation.notification_grapht)
                 }
             }
         }
     }
+
+
 
     /*
            button.setOnClickListener {

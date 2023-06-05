@@ -31,14 +31,12 @@ class FollowAndFollowedFragment : Fragment() {
         arguments?.let {
             val incoming =it.getString("incoming")
             val authName =it.getString("authName")
-            println(incoming)
-            println(authName)
             if (incoming.equals("follow")){
                 viewModel.getUserFollow(authName!!)
             }else{
                 viewModel.getUserFollowed(authName!!)
             }
-            val adapter =FollowAndFollowedAdapter(arrayListOf(),incoming!!,viewModel)
+            val adapter =FollowAndFollowedAdapter(arrayListOf(),incoming!!,viewModel,authName)
             binding.followAndFollowRecycler.adapter=adapter
             binding.followAndFollowRecycler.layoutManager=LinearLayoutManager(requireContext())
             binding.followAndFolloToolbar.profilDetailseToolbarSuccess.visibility=View.GONE
@@ -57,7 +55,6 @@ class FollowAndFollowedFragment : Fragment() {
             }
             viewModel.followItem.observe(viewLifecycleOwner){
                 adapter.updateData(it)
-
             }
             viewModel.followedItem.observe(viewLifecycleOwner){
                 adapter.updateData(it)

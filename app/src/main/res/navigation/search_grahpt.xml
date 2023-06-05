@@ -13,6 +13,11 @@
         <action
             android:id="@+id/action_searchFragment_to_searchProfilFragment"
             app:destination="@id/searchProfilFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_proffilFragment2"
+            app:destination="@id/proffilFragment2"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/searchProfilFragment"
@@ -25,5 +30,39 @@
         <argument
             android:name="authName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_searchProfilFragment_to_followAndFollowedFragment2"
+            app:destination="@id/followAndFollowedFragment2"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <argument
+            android:name="incoming"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/proffilFragment2"
+        android:name="com.example.chatme.view.ProffilFragment"
+        android:label="fragment_proffil"
+        tools:layout="@layout/fragment_proffil" />
+    <fragment
+        android:id="@+id/followAndFollowedFragment2"
+        android:name="com.example.chatme.view.FollowAndFollowedFragment"
+        android:label="fragment_follow_and_followed"
+        tools:layout="@layout/fragment_follow_and_followed" >
+        <argument android:name="incoming"
+            app:argType="string" />
+        <argument
+            android:name="authName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_followAndFollowedFragment2_to_searchProfilFragment"
+            app:destination="@id/searchProfilFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_searchFollowAndFollowedFragment2_to_proffilFragment2"
+            app:destination="@id/proffilFragment2"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
 </navigation>

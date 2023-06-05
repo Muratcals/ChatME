@@ -1,8 +1,12 @@
 package com.example.chatme.repository
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.chatme.model.UserInformationModel
+import com.example.chatme.model.followNotificationModel
 import com.example.chatme.model.followedModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,8 +34,6 @@ class repo @Inject constructor(
             authList.value=items
         }
     }
-
-
     /*
     fun getSearchAuth (char:String){
         MainScope().launch {

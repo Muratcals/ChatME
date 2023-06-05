@@ -39,10 +39,12 @@ class NotificationFragment : Fragment() {
             adapter.updateData(it?: arrayListOf())
         }
         viewModel.followRequest.observe(viewLifecycleOwner){
-            if (it?.size!! >1){
-                binding.followRequestName.setText("${it[0].name} + ${it.size-1} diğer")
-            }else if (!it.isEmpty()){
+            if (it?.isEmpty()==true){
+            binding.followRequestName.setText("Takip istekleri")
+            }else if (it?.size==1){
                 binding.followRequestName.setText(it[0].name)
+            } else if (it?.size!! >1){
+                binding.followRequestName.setText("${it[0].name} + ${it.size-1} diğer")
             }
         }
         binding.viewRequestButton.setOnClickListener {

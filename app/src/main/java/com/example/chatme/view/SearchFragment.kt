@@ -17,6 +17,8 @@ import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followedModel
 import com.example.chatme.repository.repo
 import com.example.chatme.viewmodel.SearchViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,6 +27,7 @@ class SearchFragment : Fragment() {
 
     @Inject lateinit var repository:repo
     @Inject lateinit var viewModel: SearchViewModel
+    @Inject lateinit var getAuth: FirebaseUser
     private lateinit var binding:FragmentSearchBinding
 
     override fun onCreateView(
@@ -38,7 +41,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         repository.getAllUser()
-        val adapter =SearchRecyclerAdapter(arrayListOf())
+        val adapter =SearchRecyclerAdapter(arrayListOf(),getAuth)
         binding.searchRecycler.adapter=adapter
         binding.searchRecycler.layoutManager=LinearLayoutManager(requireContext())
         repository.authList.observe(viewLifecycleOwner){ list->

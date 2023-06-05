@@ -16,10 +16,13 @@ import com.example.chatme.model.followedModel
 import com.example.chatme.util.CallbackRecycler
 import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.util.utils.placeHolder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import de.hdodenhof.circleimageview.CircleImageView
 
 class SearchRecyclerAdapter(
-    var searchItems:List<UserInformationModel>
+    var searchItems:List<UserInformationModel>,
+    val getAuth: FirebaseUser
 ):RecyclerView.Adapter<SearchRecyclerAdapter.SearchVH>() {
     class SearchVH(view: View):RecyclerView.ViewHolder(view) {
         val image =view.findViewById<CircleImageView>(R.id.searchAuthImage)
@@ -46,8 +49,12 @@ class SearchRecyclerAdapter(
             holder.image.downloadUrl(searchItems[position].profilImage, placeHolder(holder.itemView.context))
         }
         holder.searchLayout.setOnClickListener {
-            val bundle = bundleOf("mail" to searchItems[position].mail,"authName" to searchItems[position].authName)
-            holder.itemView.findNavController().navigate(R.id.action_searchFragment_to_searchProfilFragment,bundle)
+            if (searchItems[position].mail.equals(getAuth.email.toString())){
+                holder.itemView.findNavController().navigate(R.id.action_searchFragment_to_proffilFragment2)
+            }else{
+                val bundle = bundleOf("mail" to searchItems[position].mail,"authName" to searchItems[position].authName,"incoming" to "search")
+                holder.itemView.findNavController().navigate(R.id.action_searchFragment_to_searchProfilFragment,bundle)
+            }
         }
         holder.name.setText(searchItems[position].name)
         holder.authName.setText(searchItems[position].authName)

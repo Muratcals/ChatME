@@ -29,7 +29,6 @@ class FollowRequestFragment : Fragment() {
         binding = FragmentFollowRequestBinding.inflate(layoutInflater)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = FollowRquestRecyclerAdapter(arrayListOf(), viewModel.database, viewModel.getAuth)

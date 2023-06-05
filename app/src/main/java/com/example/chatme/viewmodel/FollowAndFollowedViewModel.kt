@@ -60,7 +60,7 @@ class FollowAndFollowedViewModel @Inject constructor(
                 val currentUser=it.toObject(UserInformationModel::class.java)
                 val followAuth= followedModel(currentUser!!.mail,currentUser.name,currentUser.authName,currentUser.profilImage, Timestamp.now())
                 userReference.collection("request").document(currentUser.authName).set(followAuth).addOnSuccessListener {
-                    val notificationModel =followNotificationModel("request",currentUser.mail,currentUser.profilImage,currentUser.authName,currentUser.name,state = false)
+                    val notificationModel =followNotificationModel("request",currentUser.mail,currentUser.profilImage,currentUser.authName,currentUser.name,state = false, time = Timestamp.now())
                     userReference.collection("notification").document("${currentUser.authName} request").set(notificationModel).addOnSuccessListener {
                         currentUserReference.collection("sendRequest").document(users.authName).set(users).addOnSuccessListener {
                             Toast.makeText(context, "İstek gönderildi.", Toast.LENGTH_SHORT).show()
@@ -89,17 +89,16 @@ class FollowAndFollowedViewModel @Inject constructor(
         }
     }
 
-    fun authDeleteFollow(binding: FragmentSearchProfilBinding,user: followedModel, mail: String,authName: String) {
-        binding.follow.visibility=View.INVISIBLE
-        binding.searchSuccessProgress.visibility=View.VISIBLE
-        database.collection("User Information").document(getAuth.email.toString())
-            .collection("followed").document(user.authName).delete().addOnSuccessListener {
-                database.collection("User Information").document(mail)
-                    .collection("follow").document(user.authName).delete().addOnSuccessListener {
-                        database.collection("User Information").document(mail).collection("notification")
+    fun authDeleteFollow(user: followedModel,authName: String) {
+        val userReference = database.collection("User Information").document(user.mail)
+        val currentUserReference=database.collection("User Information").document(getAuth.email.toString())
+        currentUserReference.collection("followed").document(user.authName).delete().addOnSuccessListener {
+                userReference.collection("follow").document(user.authName).delete().addOnSuccessListener {
+                        userReference.collection("notification")
                             .document("${authName} follow").delete().addOnSuccessListener {
-                                binding.follow.visibility=View.VISIBLE
-                                binding.searchSuccessProgress.visibility=View.INVISIBLE
+                                userReference.collection("request").document(authName).delete().addOnSuccessListener {
+
+                                }
                             }
                     }
             }

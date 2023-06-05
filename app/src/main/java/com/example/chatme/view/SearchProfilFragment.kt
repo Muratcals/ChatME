@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.example.chatme.R
 import com.example.chatme.databinding.FragmentSearchProfilBinding
 import com.example.chatme.model.UserInformationModel
@@ -40,6 +42,7 @@ class SearchProfilFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
+            val incoming=it.getString("incoming")
             val mail=it.getString("mail")
             val authName=it.getString("authName")
             observerItem()
@@ -51,8 +54,7 @@ class SearchProfilFragment : Fragment() {
                     viewModel.reFollow(binding,users!!)
                     binding.follow.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
                     binding.follow.setText("Takip")
-                }
-                if (binding.follow.text.equals("Takip Et")){
+                }else if (binding.follow.text.equals("Takip Et") || binding.follow.text.equals("Sende onu takip et")){
                     viewModel.authFollow(requireContext(),users!!,currentUser!!)
                     binding.follow.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
                     binding.follow.setText("Bekleniyor")
@@ -65,7 +67,7 @@ class SearchProfilFragment : Fragment() {
                             users!!.customerId, users.authName, users.authName, users.profilImage,
                             Timestamp.now()
                         )
-                        viewModel.authDeleteFollow(binding,user, mail, authName)
+                        viewModel.authDeleteFollow(binding,user,currentUser!!)
                         binding.follow.setBackgroundResource(R.drawable.button_background_shape)
                         binding.follow.setText("Takip Et")
                     }
@@ -78,6 +80,22 @@ class SearchProfilFragment : Fragment() {
                     viewModel.requestDeleteFollow(users!!,currentUser!!)
                     binding.follow.setBackgroundResource(R.drawable.button_background_shape)
                     binding.follow.setText("Takip Et")
+                }
+            }
+            binding.searchFollowCount.setOnClickListener {
+                val bundle = bundleOf("incoming" to "follow","authName" to authName)
+                if (incoming.equals("search")){
+                    findNavController().navigate(R.id.action_searchProfilFragment_to_followAndFollowedFragment2,bundle)
+                }else{
+                    findNavController().navigate(R.id.action_searchProfilFragment2_to_followAndFollowedFragment,bundle)
+                }
+            }
+            binding.searchFollowedCount.setOnClickListener {
+                val bundle = bundleOf("incoming" to "followed","authName" to authName)
+                if (incoming.equals("search")){
+                    findNavController().navigate(R.id.action_searchProfilFragment_to_followAndFollowedFragment2,bundle)
+                }else{
+                    findNavController().navigate(R.id.action_searchProfilFragment2_to_followAndFollowedFragment,bundle)
                 }
             }
         }

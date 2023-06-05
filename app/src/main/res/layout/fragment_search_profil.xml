@@ -80,7 +80,8 @@
 
                         <TextView
                             android:id="@+id/searchFollowCount"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
+                            android:gravity="center"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:fontFamily="sans-serif-black"
@@ -105,7 +106,8 @@
 
                         <TextView
                             android:id="@+id/searchFollowedCount"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
+                            android:gravity="center"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:fontFamily="sans-serif-black"

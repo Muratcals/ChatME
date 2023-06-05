@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Bundle
@@ -15,12 +14,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.example.chatme.R
+import com.example.chatme.Retrofit.RetrofitServices
 import com.example.chatme.databinding.FragmentProfilEditBinding
 import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.util.utils.placeHolder
@@ -31,7 +29,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import java.io.OutputStream
 import java.util.UUID
 import javax.inject.Inject
 
@@ -144,7 +141,6 @@ class ProfilEditFragment : Fragment() {
             binding.genderText.isEnabled=true
             binding.authNameText.isEnabled=true
         }
-
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode==100){
@@ -167,17 +163,17 @@ class ProfilEditFragment : Fragment() {
                             buttonEnabled(true)
                         }.addOnFailureListener {
                             reference.delete().addOnSuccessListener {
-                               buttonEnabled(true)
+                                buttonEnabled(true)
                             }.addOnFailureListener {
                                 println(it.localizedMessage)
                             }
                         }
                     }.addOnFailureListener {
-                       buttonEnabled(true)
+                        buttonEnabled(true)
                         println(it.localizedMessage)
                     }
                 }.addOnFailureListener {
-                   buttonEnabled(true)
+                    buttonEnabled(true)
                     println(it.localizedMessage)
                 }
             }
