@@ -113,7 +113,7 @@ class SearchProfilFragment : Fragment() {
             binding.searchFollowedCount.setText(it.size.toString())
         }
         viewModel.progress.observe(viewLifecycleOwner) {
-            if (it) {
+            if (it){
                 binding.searchProgressBar.visibility = View.VISIBLE
                 binding.searchLayout.visibility = View.GONE
             } else {

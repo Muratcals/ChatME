@@ -1,7 +1,6 @@
 package com.example.chatme.adapter
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
@@ -23,14 +22,13 @@ import com.example.chatme.util.utils.placeHolder
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import de.hdodenhof.circleimageview.CircleImageView
 
 class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>,val database: FirebaseFirestore,val getAuth: FirebaseUser):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_FOLLOW = 0
     private val VIEW_TYPE_REQUEST = 1
 
-    class FollowRecyclerVH(view:View) :RecyclerView.ViewHolder(view){
+    class requestRecyclerVH(view:View) :RecyclerView.ViewHolder(view){
 
         val requestButtonLayout=view.findViewById<LinearLayout>(R.id.requestButtonLayout)
         val requestFollowButton=view.findViewById<Button>(R.id.requestFollowButton)
@@ -52,16 +50,16 @@ class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>
 
     override fun getItemViewType(position: Int): Int {
         val item = requestsList[position]
-        return if (item.categoryName == "follow") {
+        return if (item.categoryName.equals("follow")) {
             VIEW_TYPE_FOLLOW
         } else {
             VIEW_TYPE_REQUEST
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType==VIEW_TYPE_FOLLOW){
+        return if (viewType==VIEW_TYPE_REQUEST){
             val view =LayoutInflater.from(parent.context).inflate(R.layout.follow_requests_view,parent,false)
-            FollowRecyclerVH(view)
+            requestRecyclerVH(view)
         }else{
             val view =LayoutInflater.from(parent.context).inflate(R.layout.notification_follow_view,parent,false)
             notificationRecyclerVH(view)
@@ -76,8 +74,8 @@ class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder.itemViewType==VIEW_TYPE_FOLLOW){
-            val newHolder=holder as FollowRecyclerVH
+        if (holder.itemViewType==VIEW_TYPE_REQUEST){
+            val newHolder=holder as requestRecyclerVH
             if (requestsList[position].imageUrl.isEmpty()){
                 newHolder.authImage.setImageResource(R.drawable.profil_icon)
             }else{
@@ -227,7 +225,7 @@ class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>
         requestsList=newList
     }
 
-    fun requestSuccess(holder:FollowRecyclerVH,users:followNotificationModel){
+    fun requestSuccess(holder:requestRecyclerVH, users:followNotificationModel){
         holder.progressBar.visibility=View.VISIBLE
         holder.successButton.visibility=View.INVISIBLE
         val currentReference =database.collection("User Information").document(getAuth.email.toString())
@@ -262,7 +260,7 @@ class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>
         }
     }
 
-    fun followController(holder:FollowRecyclerVH,authName:String){
+    fun followController(holder:requestRecyclerVH, authName:String){
         holder.requestFollowButtonLayout.visibility=View.VISIBLE
         holder.requestButtonLayout.visibility=View.GONE
         val currentReference =database.collection("User Information").document(getAuth.email.toString())

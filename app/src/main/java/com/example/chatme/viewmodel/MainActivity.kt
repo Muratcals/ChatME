@@ -1,30 +1,15 @@
-package com.example.chatme
+package com.example.chatme.viewmodel
 
-import android.app.AlarmManager
-import android.app.AlertDialog
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.format.DateFormat
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
+import com.example.chatme.AddPostActivity
+import com.example.chatme.R
 import com.example.chatme.databinding.ActivityMainBinding
-import com.example.chatme.model.MessageModel
-import com.example.chatme.model.UserInformationModel
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalTime
-import java.util.Calendar
-import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 
@@ -53,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             R.id.profilFragment -> {
                 println(R.id.proffilFragment)
                 // Eğer şu anki hedef "profilFragment" ise yenileme işlemi yapma
-                if (currentDestination!=R.id.proffilFragment) {
+                if (currentDestination!= R.id.proffilFragment) {
                     navController.setGraph(R.navigation.profil_grapht)
                 }
             }
@@ -71,6 +56,10 @@ class MainActivity : AppCompatActivity() {
                 if (currentDestination != R.id.notificationFragment) {
                     navController.setGraph(R.navigation.notification_grapht)
                 }
+            }
+            R.id.addPhoto ->{
+               val intent =Intent(applicationContext, AddPostActivity::class.java)
+                startActivity(intent)
             }
         }
     }

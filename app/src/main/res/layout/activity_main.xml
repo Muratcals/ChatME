@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".viewmodel.MainActivity"
     android:orientation="vertical">
 
 
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         app:defaultNavHost="true"
         android:layout_above="@id/mainBottomMenu"
-        app:navGraph="@navigation/search_grahpt"/>
+        app:navGraph="@navigation/main_grapht"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         app:backgroundTint="@color/backgroundColor"

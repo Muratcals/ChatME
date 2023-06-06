@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.chatme.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.scopes.ActivityScoped
@@ -30,7 +29,7 @@ class MainLoginViewModel @Inject constructor(
                 val email =it.documents.get(0).get("mail") as String
                 auth.signInWithEmailAndPassword(email,password).addOnSuccessListener {
                     Toast.makeText(activity.applicationContext, "Giriş başarılı.", Toast.LENGTH_SHORT).show()
-                    val intent =Intent(activity.applicationContext,MainActivity::class.java)
+                    val intent =Intent(activity.applicationContext, MainActivity::class.java)
                     startActivity(activity,intent,null)
                     progress.value=false
                     activity.finish()

@@ -3,10 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainLoginFragment">
+    app:startDestination="@id/postImageFragment">
     <fragment
-        android:id="@+id/mainLoginFragment"
-        android:name="com.example.chatme.view.MainLoginFragment"
-        android:label="fragment_main_login"
-        tools:layout="@layout/fragment_main_login" />
+        android:id="@+id/postImageFragment"
+        android:name="com.example.chatme.view.PostImageFragment"
+        android:label="fragment_post_image"
+        tools:layout="@layout/fragment_post_image" >
+        <action
+            android:id="@+id/action_postImageFragment_to_imageSuccessragment"
+            app:destination="@id/imageSuccessragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageSuccessragment"
+        android:name="com.example.chatme.view.ImageSuccessragment"
+        android:label="fragment_image_successragment"
+        tools:layout="@layout/fragment_image_successragment" >
+        <argument
+            android:name="imageUrl"
+            app:argType="android.net.Uri" />
+    </fragment>
 </navigation>

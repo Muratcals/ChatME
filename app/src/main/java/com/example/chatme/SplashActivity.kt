@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.chatme.databinding.MainDialogViewBinding
+import com.example.chatme.viewmodel.MainActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +17,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         if (auth.currentUser!=null){
-            val intent =Intent(applicationContext,MainActivity::class.java)
+            val intent =Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)
             this.finish()
         }else{
