@@ -34,7 +34,6 @@ class MainPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getPostList()
-
         viewModel.database.collection("User Information").document(viewModel.getAuth.email.toString()).get().addOnSuccessListener {
             if (it.exists()){
                 val userInformation=it.toObject(UserInformationModel::class.java)
@@ -46,6 +45,15 @@ class MainPageFragment : Fragment() {
                         adapter.updateData(list)
                     }
                 }
+            }
+        }
+        viewModel.progress.observe(viewLifecycleOwner){
+            if (it){
+                binding.mainPageProgress.visibility=View.VISIBLE
+                binding.recyclerView.visibility=View.GONE
+            }else{
+                binding.mainPageProgress.visibility=View.INVISIBLE
+                binding.recyclerView.visibility=View.VISIBLE
             }
         }
     }

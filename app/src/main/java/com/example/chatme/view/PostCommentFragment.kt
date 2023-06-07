@@ -6,12 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatme.R
+import com.example.chatme.adapter.CommentsRecyclerAdapter
 import com.example.chatme.databinding.FragmentPostCommentBinding
+import com.example.chatme.model.CommentModel
+import com.example.chatme.model.UserInformationModel
 import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.util.utils.placeHolder
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
+import java.sql.Time
 import javax.inject.Inject
 @AndroidEntryPoint
 class PostCommentFragment : Fragment() {
@@ -30,10 +36,18 @@ class PostCommentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
+            binding.commentToolbar.profilDetailseToolbarTitle.setText("Yorumlar")
+            binding.commentToolbar.profilDetailsToolbarBackPage.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
+            binding.commentToolbar.profilDetailseToolbarSuccess.visibility=View.GONE
             val postId =it.getString("postId")
             val currentAuthName=it.getString("authName")
             viewModel.getPost(postId!!)
             viewModel.getComments(postId)
+            val adapter =CommentsRecyclerAdapter(arrayListOf())
+            binding.commentsRecyclerView.adapter=adapter
+            binding.commentsRecyclerView.layoutManager=LinearLayoutManager(requireContext())
             viewModel.progress.observe(viewLifecycleOwner){
                 if (it){
                     binding.commentLayout.visibility=View.GONE
@@ -49,16 +63,45 @@ class PostCommentFragment : Fragment() {
                 binding.commentsUserWhoShared.setText(it.userWhoShared)
                 binding.addCommentAuthImage.downloadUrl(it.userWhoSharedImage, placeHolder(requireContext()))
                 binding.commentEdittext.setHint("${currentAuthName} adıyla yorum ekle")
+                val time =Timestamp.now().seconds-it.time.seconds
+                val minute =time/60
+                val hour =minute/60
+                val day =hour/24
+                if (time<=60){
+                    binding.commentsPostTime.setText("${minute.toInt()}sn")
+                }else if (minute<=60){
+                binding.commentsPostTime.setText("${minute.toInt()}d")
+                }else if (hour<=24){
+                    binding.commentsPostTime.setText("${hour.toInt()}s")
+                }else if (hour>24){
+                    binding.commentsPostTime.setText("${day.toInt()}g")
+                }
             }
            viewModel.comments.observe(viewLifecycleOwner){
-               if (it.isEmpty()){
+               if (it?.isEmpty()==true){
                    binding.commentsEmptyLayout.visibility=View.VISIBLE
                    binding.commentsRecyclerView.visibility=View.GONE
                }else{
                    binding.commentsEmptyLayout.visibility=View.GONE
                    binding.commentsRecyclerView.visibility=View.VISIBLE
+                   adapter.updateData(it!!)
                }
            }
+            binding.commentEdittext.addTextChangedListener {
+                if (it?.isEmpty()==true){
+                    binding.shareCommentButton.visibility=View.INVISIBLE
+                }else{
+                    binding.shareCommentButton.visibility=View.VISIBLE
+                }
+            }
+            binding.shareCommentButton.setOnClickListener {
+                viewModel.database.collection("User Information").document(viewModel.getAuth.email.toString()).get().addOnSuccessListener {
+                    val currentUserInformation=it.toObject(UserInformationModel::class.java)
+                    val commentModelData=CommentModel(currentUserInformation!!.authName,binding.commentEdittext.text.toString(),0,currentUserInformation.profilImage)
+                    viewModel.postComments(view,postId,commentModelData)
+                }
+
+            }
         }
     }
 

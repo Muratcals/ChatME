@@ -20,6 +20,7 @@ class MainPageViewModel @Inject constructor(
     val postList=MutableLiveData<List<PostModel>>()
     val progress=MutableLiveData<Boolean>()
     fun getPostList(){
+        progress.value=true
         viewModelScope.launch(Dispatchers.IO) {
             database.collection("Posts").addSnapshotListener { value, _ ->
                 if (value!=null){
