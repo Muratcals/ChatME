@@ -1,9 +1,16 @@
 package com.example.chatme.util
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.os.Build
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import androidx.annotation.RequiresApi
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.chatme.R
 import com.example.chatme.Retrofit.API
 import com.google.gson.Gson
 import de.hdodenhof.circleimageview.CircleImageView
@@ -19,15 +26,33 @@ object utils {
         .addConverterFactory(GsonConverterFactory.create())
         .build().create(API::class.java)
 
-    fun CircleImageView.downloadUrl(url: String,placeholder: CircularProgressDrawable){
-        Glide.with(context).load(url).placeholder(placeholder).into(this)
+    fun CircleImageView.downloadUrl(url: String,placeholder: ProgressBar){
+        val progressDrawable = createProgressDrawable(context)
+        placeholder.progressDrawable = progressDrawable
+        Glide.with(context).load(url).placeholder(progressDrawable).into(this)
     }
 
-    fun placeHolder(context: Context):CircularProgressDrawable{
+    fun ImageView.downloadUrl(url: String, placeholder: ProgressBar){
+        val progressDrawable = createProgressDrawable(context)
+        placeholder.progressDrawable = progressDrawable
+        Glide.with(context).load(url).placeholder(progressDrawable).into(this)
+    }
+
+    fun createProgressDrawable(context: Context): Drawable {
         return CircularProgressDrawable(context).apply {
-            strokeWidth=8F
-            centerRadius=40F
+            strokeWidth = 8f
+            centerRadius = 40f
             start()
+        }
+    }
+    fun placeHolder(context: Context): ProgressBar {
+        return ProgressBar(context).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            // İlerleme çizimiyle ilgili isteğe bağlı özelleştirmeleri yapabilirsiniz
+            // Örneğin, stil, renk, vb. ayarları burada yapabilirsiniz
         }
     }
 

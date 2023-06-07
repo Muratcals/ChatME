@@ -9,5 +9,49 @@
         android:id="@+id/mainPageFragment"
         android:name="com.example.chatme.view.MainPageFragment"
         android:label="fragment_main_page"
-        tools:layout="@layout/fragment_main_page" />
+        tools:layout="@layout/fragment_main_page" >
+        <action
+            android:id="@+id/action_mainPageFragment_to_searchProfilFragment3"
+            app:destination="@id/searchProfilFragment3"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainPageFragment_to_proffilFragment3"
+            app:destination="@id/proffilFragment3"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainPageFragment_to_postCommentFragment"
+            app:destination="@id/postCommentFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchProfilFragment3"
+        android:name="com.example.chatme.view.SearchProfilFragment"
+        android:label="fragment_search_profil"
+        tools:layout="@layout/fragment_search_profil" >
+        <argument android:name="incoming"
+            app:argType="string" />
+        <argument
+            android:name="mail"
+            app:argType="string" />
+        <argument
+            android:name="authName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/proffilFragment3"
+        android:name="com.example.chatme.view.ProffilFragment"
+        android:label="fragment_proffil"
+        tools:layout="@layout/fragment_proffil" />
+    <fragment
+        android:id="@+id/postCommentFragment"
+        android:name="com.example.chatme.view.PostCommentFragment"
+        android:label="fragment_post_comment"
+        tools:layout="@layout/fragment_post_comment" >
+        <argument
+            android:name="postId"
+            app:argType="string" />
+    </fragment>
 </navigation>
