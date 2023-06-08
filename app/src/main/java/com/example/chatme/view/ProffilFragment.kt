@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.chatme.R
+import com.example.chatme.adapter.PostRecyclerView
 import com.example.chatme.databinding.FragmentProffilBinding
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followedModel
@@ -46,6 +48,13 @@ class ProffilFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observerItem()
         viewModel.authProfilInformation()
+        viewModel.getPost()
+        val adapter =PostRecyclerView(arrayListOf())
+        binding.userImagesRecycler.adapter=adapter
+        binding.userImagesRecycler.layoutManager=GridLayoutManager(requireContext(),3)
+        viewModel.postList.observe(viewLifecycleOwner){
+            adapter.updateData(it)
+        }
         binding.profilEditButton.setOnClickListener {
             findNavController().navigate(R.id.action_proffilFragment_to_profilEditFragment)
         }

@@ -1,6 +1,5 @@
 package com.example.chatme.view
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,16 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.chatme.R
 import com.example.chatme.adapter.CommentsRecyclerAdapter
 import com.example.chatme.databinding.FragmentPostCommentBinding
 import com.example.chatme.model.CommentModel
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.util.utils.placeHolder
+import com.example.chatme.viewmodel.PostCommentViewModel
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
-import java.sql.Time
+import java.util.UUID
 import javax.inject.Inject
 @AndroidEntryPoint
 class PostCommentFragment : Fragment() {
@@ -45,7 +44,7 @@ class PostCommentFragment : Fragment() {
             val currentAuthName=it.getString("authName")
             viewModel.getPost(postId!!)
             viewModel.getComments(postId)
-            val adapter =CommentsRecyclerAdapter(arrayListOf())
+            val adapter =CommentsRecyclerAdapter(arrayListOf(),viewModel.database,viewModel.getAuth,postId)
             binding.commentsRecyclerView.adapter=adapter
             binding.commentsRecyclerView.layoutManager=LinearLayoutManager(requireContext())
             viewModel.progress.observe(viewLifecycleOwner){
@@ -97,7 +96,7 @@ class PostCommentFragment : Fragment() {
             binding.shareCommentButton.setOnClickListener {
                 viewModel.database.collection("User Information").document(viewModel.getAuth.email.toString()).get().addOnSuccessListener {
                     val currentUserInformation=it.toObject(UserInformationModel::class.java)
-                    val commentModelData=CommentModel(currentUserInformation!!.authName,binding.commentEdittext.text.toString(),0,currentUserInformation.profilImage)
+                    val commentModelData=CommentModel(UUID.randomUUID().toString(),currentUserInformation!!.authName,binding.commentEdittext.text.toString(),currentUserInformation.profilImage)
                     viewModel.postComments(view,postId,commentModelData)
                 }
 

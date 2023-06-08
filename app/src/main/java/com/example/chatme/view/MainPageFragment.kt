@@ -19,8 +19,6 @@ class MainPageFragment : Fragment() {
     @Inject
     lateinit var viewModel: MainPageViewModel
     private lateinit var binding:FragmentMainPageBinding
-    val  PICK_IMAGE_REQUEST_CODE=100
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,19 +28,24 @@ class MainPageFragment : Fragment() {
         return binding.root
     }
 
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.getPostList()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getPostList()
+
         viewModel.database.collection("User Information").document(viewModel.getAuth.email.toString()).get().addOnSuccessListener {
             if (it.exists()){
                 val userInformation=it.toObject(UserInformationModel::class.java)
-                val adapter =PostRecyclerAdapter(viewModel.database,userInformation!!,arrayListOf())
+                val adapter =PostRecyclerAdapter(viewModel.database,userInformation!!,arrayListOf(),viewModel.storage)
                 binding.recyclerView.adapter=adapter
                 binding.recyclerView.layoutManager=LinearLayoutManager(requireContext())
                 viewModel.postList.observe(viewLifecycleOwner){list->
                     if (list.isNotEmpty()){
                         adapter.updateData(list)
+                    }else{
+
                     }
                 }
             }

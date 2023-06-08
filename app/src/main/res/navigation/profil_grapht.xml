@@ -18,6 +18,11 @@
         <action
             android:id="@+id/action_proffilFragment_to_followAndFollowedFragment"
             app:destination="@id/followAndFollowedFragment" />
+        <action
+            android:id="@+id/action_proffilFragment_to_postDetailsFragmentFragment"
+            app:destination="@id/postDetailsFragmentFragment"
+            app:enterAnim="@android:anim/slide_out_right"
+            app:popExitAnim="@android:anim/slide_in_left" />
     </fragment>
     <fragment
         android:id="@+id/profilEditFragment"
@@ -79,6 +84,15 @@
             app:destination="@id/followAndFollowedFragment" />
         <argument
             android:name="incoming"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/postDetailsFragmentFragment"
+        android:name="com.example.chatme.view.PostDetailsFragmentFragment"
+        android:label="fragment_post_details"
+        tools:layout="@layout/fragment_post_details" >
+        <argument
+            android:name="postId"
             app:argType="string" />
     </fragment>
 </navigation>

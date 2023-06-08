@@ -9,6 +9,7 @@ import com.example.chatme.R
 import com.example.chatme.databinding.FragmentProffilBinding
 import com.example.chatme.databinding.FragmentSearchBinding
 import com.example.chatme.databinding.FragmentSearchProfilBinding
+import com.example.chatme.model.PostModel
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followedModel
 import com.google.firebase.Timestamp
@@ -31,6 +32,8 @@ class ProffilViewModel @Inject constructor(
     val follow =MutableLiveData<List<followedModel>>()
     val followed =MutableLiveData<List<followedModel>>()
     val progress = MutableLiveData<Boolean>()
+    val postList =MutableLiveData<List<PostModel>>()
+    val savePostList=MutableLiveData<List<PostModel>>()
     val authInformation = MutableLiveData<UserInformationModel>()
 
     fun authProfilInformation(){
@@ -43,6 +46,24 @@ class ProffilViewModel @Inject constructor(
                     getFollowAndFollowed(user.reference)
                 }
             }
+    }
+
+    fun getPost(){
+        database.collection("User Information").document(getAuth.email.toString()).get().addOnSuccessListener {authResult->
+            if (authResult.exists()){
+                database.collection("Posts").whereEqualTo("userWhoShared",authResult.get("authName")).get().addOnSuccessListener { postResult->
+                    val result =postResult.toObjects(PostModel::class.java)
+                    postList.value=result
+                }
+            }
+        }
+    }
+
+    fun savePost(){
+        database.collection("User Information").document(getAuth.email.toString()).collection("savePost").get().addOnSuccessListener {
+            val savePostListResult=it.toObjects(PostModel::class.java)
+            savePostList.value=savePostListResult
+        }
     }
 
     fun getFollowAndFollowed(reference: DocumentReference){

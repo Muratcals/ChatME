@@ -1,4 +1,4 @@
-package com.example.chatme.view
+package com.example.chatme.viewmodel
 
 import android.view.View
 import android.widget.Toast
@@ -8,6 +8,7 @@ import com.example.chatme.model.CommentModel
 import com.example.chatme.model.PostModel
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import dagger.hilt.android.scopes.ActivityScoped
 import java.util.UUID
 import javax.inject.Inject
@@ -32,7 +33,8 @@ class PostCommentViewModel @Inject constructor(
     }
 
     fun getComments(documentId: String){
-        database.collection("Posts").document(documentId).collection("comments").addSnapshotListener { value, error ->
+        database.collection("Posts").document(documentId).collection("comments").orderBy("commentTime",
+            Query.Direction.DESCENDING).addSnapshotListener { value, error ->
             val datas =value?.toObjects(CommentModel::class.java)
             comments.value=datas
         }

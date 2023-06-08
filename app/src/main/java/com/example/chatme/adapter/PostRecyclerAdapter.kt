@@ -1,12 +1,16 @@
 package com.example.chatme.adapter
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -23,10 +27,11 @@ import com.example.chatme.util.utils.placeHolder
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
 
 
-class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformationModel: UserInformationModel, var postList:List<PostModel>):RecyclerView.Adapter<PostRecyclerAdapter.PostVH>() {
+class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformationModel: UserInformationModel, var postList:List<PostModel>,val storage: FirebaseStorage):RecyclerView.Adapter<PostRecyclerAdapter.PostVH>() {
     class PostVH(view:View):RecyclerView.ViewHolder(view) {
         val authImage =view.findViewById<CircleImageView>(R.id.anaMenuPostAuthImage)
         val authName=view.findViewById<TextView>(R.id.anaMenuPostAuthName)
@@ -40,6 +45,10 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
         val commentsIsView=view.findViewById<TextView>(R.id.commentIsViewButton)
         val postCommentButton=view.findViewById<ImageView>(R.id.anaMenuPostCommentButton)
         val postTime =view.findViewById<TextView>(R.id.createPostTime)
+        val ellipsisIcon =view.findViewById<ImageView>(R.id.postEllipsisIcon)
+        val ellipsisDelete =view.findViewById<LinearLayout>(R.id.ellipsisDelete)
+        val ellipsisSave =view.findViewById<LinearLayout>(R.id.ellipsisSave)
+        val ellipsisLayout =view.findViewById<LinearLayout>(R.id.mainEllipsisLayout)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostVH {
@@ -52,6 +61,9 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
         holder.authImage.downloadUrl(postList[position].userWhoSharedImage, placeHolder(holder.itemView.context))
         timeUpdate(holder,postList[position].time)
         holder.authName.setText(postList[position].userWhoShared)
+        if (!postList[position].userWhoShared.equals(currentUserInformationModel.authName)){
+            holder.ellipsisDelete.visibility=View.GONE
+        }
         database.collection("Posts").document(postList[position].id).collection("userWhoLike").whereEqualTo("authName",currentUserInformationModel.authName).get().addOnSuccessListener {
             if (!it.isEmpty){
                 holder.likeAnimation.progress=1F
@@ -110,11 +122,48 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
             val bundle = bundleOf("postId" to postList[position].id,"authName" to currentUserInformationModel.authName)
             holder.itemView.findNavController().navigate(R.id.action_mainPageFragment_to_postCommentFragment,bundle)
         }
-
+        holder.ellipsisIcon.setOnClickListener {
+            if (holder.ellipsisLayout.isVisible){
+                holder.ellipsisLayout.visibility=View.GONE
+            }else{
+                holder.ellipsisLayout.visibility=View.VISIBLE
+            }
+        }
+        holder.ellipsisDelete.setOnClickListener {
+            ellipsisDelete(holder,postList[position].imageUrl)
+        }
     }
 
     override fun getItemCount(): Int {
         return postList.size
+    }
+
+    fun ellipsisDelete(holder: PostVH,documentId:String){
+        val alertBuilder=AlertDialog.Builder(holder.itemView.context)
+        alertBuilder.setMessage("Gönderinizi silmek istediğinize emin misiniz")
+        alertBuilder.setTitle("Gönderiyi sil")
+        alertBuilder.setPositiveButton("Sil") { dialog, which ->
+            val reference = database.collection("Posts").document(documentId)
+            reference.get().addOnSuccessListener {
+                if (it.exists()) {
+                    storage.getReference(it.get("imageUrl") as String).delete()
+                        .addOnSuccessListener {
+                            reference.delete().addOnSuccessListener {
+                                Toast.makeText(
+                                    holder.itemView.context,
+                                    "Gönderi başarıyla silindi",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                dialog.cancel()
+                            }
+                        }
+                }
+            }
+        }
+        alertBuilder.setNegativeButton("İptal et") { dialog, which ->
+            dialog.cancel()
+        }
+
     }
 
     fun likeImages(holder: PostVH,documentId:String,numberOfLikes:Int){
