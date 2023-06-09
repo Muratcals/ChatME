@@ -1,7 +1,6 @@
 package com.example.chatme.adapter
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,19 +15,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.chatme.R
+import com.example.chatme.model.NatificationModel.LikeModel
 import com.example.chatme.model.PostModel
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.UserWhoLikesModel
-import com.example.chatme.model.followedModel
-import com.example.chatme.util.CallbackRecycler
 import com.example.chatme.util.CallbackRecyclerPost
 import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.util.utils.placeHolder
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 
 class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformationModel: UserInformationModel, var postList:List<PostModel>,val storage: FirebaseStorage):RecyclerView.Adapter<PostRecyclerAdapter.PostVH>() {
@@ -81,12 +83,15 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
                 holder.commentsIsView.setText("${it.size()} yorumun tümünü gör")
             }
         }
-        if (postList[position].numberOfLikes!=0){
-            holder.numberOfLikes.visibility=View.VISIBLE
-            holder.numberOfLikes.setText("${postList[position].numberOfLikes} beğenme")
-        }else{
-            holder.numberOfLikes.visibility=View.GONE
+        database.collection("Posts").document(postList[position].id).collection("userWhoLike").get().addOnSuccessListener {
+            if (!it.isEmpty){
+                holder.numberOfLikes.visibility=View.VISIBLE
+                holder.numberOfLikes.setText("${it.size()} beğenme")
+            }else{
+                holder.numberOfLikes.visibility=View.GONE
+            }
         }
+
         if (postList[position].explanation.isNotEmpty()){
             holder.explanationLayout.visibility=View.VISIBLE
             holder.explanationAuthName.setText(postList[position].userWhoShared)
@@ -96,7 +101,7 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
         }
 
         holder.likeAnimation.setOnClickListener {
-            likeImages(holder,postList[position].id,postList[position].numberOfLikes,)
+            likeImages(holder,postList[position],postList[position].numberOfLikes,postList[position].userWhoShared)
         }
         holder.saveButton.setOnClickListener {
             holder.saveButton.playAnimation()
@@ -166,20 +171,33 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
 
     }
 
-    fun likeImages(holder: PostVH,documentId:String,numberOfLikes:Int){
-        database.collection("Posts").document(documentId).collection("userWhoLike").whereEqualTo("authName",currentUserInformationModel.authName).get().addOnSuccessListener {
-            val datas =it.toObjects(UserWhoLikesModel::class.java)
-            if (datas.isEmpty()){
+    fun likeImages(holder: PostVH, document: PostModel, numberOfLikes:Int,authName:String){
+        database.collection("Posts").document(document.id).collection("userWhoLike").whereEqualTo("authName",currentUserInformationModel.authName).get().addOnSuccessListener {
+            if (it.isEmpty()){
                 holder.likeAnimation.playAnimation()
                 holder.likeAnimation.progress=1F
                 val postLikeModel =UserWhoLikesModel(currentUserInformationModel.mail,currentUserInformationModel.name,currentUserInformationModel.authName,currentUserInformationModel.profilImage,Timestamp.now())
-                database.collection("Posts").document(documentId).collection("userWhoLike").document(currentUserInformationModel.authName).set(postLikeModel).addOnSuccessListener {
-                    database.collection("Posts").document(documentId).update("numberOfLikes",numberOfLikes+1)
+                val notificationLikeModel =LikeModel(document.id,currentUserInformationModel.authName,currentUserInformationModel.profilImage,document.imageUrl,"like",currentUserInformationModel.mail)
+                database.collection("Posts").document(document.id).collection("userWhoLike").document(currentUserInformationModel.authName).set(postLikeModel).addOnSuccessListener {
+                    database.collection("Posts").document(document.id).update("numberOfLikes",numberOfLikes+1).addOnSuccessListener {
+                        MainScope().launch(Dispatchers.IO) {
+                            database.collection("User Information").whereEqualTo("authName",authName).get().addOnSuccessListener {userModel->
+                                val userInformationModel=userModel.toObjects(UserInformationModel::class.java)
+                                if (!userInformationModel[0].mail.equals(FirebaseAuth.getInstance().currentUser!!.email.toString())){
+                                    database.collection("User Information").document(userInformationModel[0].mail).collection("notification").document("${currentUserInformationModel.authName} like").set(notificationLikeModel).addOnSuccessListener {
+
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
                 }
             }else{
                 holder.likeAnimation.clearAnimation()
-                database.collection("Posts").document(documentId).collection("userWhoLike").document(currentUserInformationModel.authName).delete().addOnSuccessListener {
-                    database.collection("Posts").document(documentId).update("numberOfLikes",numberOfLikes-1).addOnSuccessListener {
+                database.collection("Posts").document(document.id).collection("userWhoLike").document(currentUserInformationModel.authName).delete().addOnSuccessListener {
+                    database.collection("Posts").document(document.id).update("numberOfLikes",numberOfLikes-1).addOnSuccessListener {
 
                     }
                 }
@@ -209,5 +227,9 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
         }else if (hour>24){
             holder.postTime.setText("${day.toInt()} gün önce")
         }
+    }
+
+    fun saveImage(){
+
     }
 }

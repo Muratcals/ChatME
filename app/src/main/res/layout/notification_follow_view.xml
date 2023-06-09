@@ -5,14 +5,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/backgroundColor"
     android:orientation="horizontal"
-    android:padding="@dimen/_5sdp">
+    android:paddingHorizontal="@dimen/_5sdp"
+    android:paddingVertical="@dimen/_10sdp">
 
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/followImage"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
-        android:src="@drawable/profil_icon"
         android:layout_marginStart="@dimen/_5sdp" />
 
     <LinearLayout
@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/followAuthName"
-            android:layout_width="@dimen/_15sdp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="7"
             android:text="demirtas52samet seni takip etmeye başladı"

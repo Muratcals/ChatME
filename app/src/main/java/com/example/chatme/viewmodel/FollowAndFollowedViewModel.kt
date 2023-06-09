@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.chatme.databinding.FragmentSearchProfilBinding
+import com.example.chatme.model.NatificationModel.RequestModel
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followNotificationModel
 import com.example.chatme.model.followedModel
@@ -59,9 +60,9 @@ class FollowAndFollowedViewModel @Inject constructor(
             if (it.exists()){
                 val currentUser=it.toObject(UserInformationModel::class.java)
                 val followAuth= followedModel(currentUser!!.mail,currentUser.name,currentUser.authName,currentUser.profilImage, Timestamp.now())
+                val notificationRequestModel=RequestModel(currentUser.authName,currentUser.name,currentUser.profilImage,"request",currentUser.mail)
                 userReference.collection("request").document(currentUser.authName).set(followAuth).addOnSuccessListener {
-                    val notificationModel =followNotificationModel("request",currentUser.mail,currentUser.profilImage,currentUser.authName,currentUser.name,state = false, time = Timestamp.now())
-                    userReference.collection("notification").document("${currentUser.authName} request").set(notificationModel).addOnSuccessListener {
+                    userReference.collection("notification").document("${currentUser.authName} request").set(notificationRequestModel).addOnSuccessListener {
                         currentUserReference.collection("sendRequest").document(users.authName).set(users).addOnSuccessListener {
                             Toast.makeText(context, "İstek gönderildi.", Toast.LENGTH_SHORT).show()
                         }

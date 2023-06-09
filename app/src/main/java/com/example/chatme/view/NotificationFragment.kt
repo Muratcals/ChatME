@@ -10,6 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatme.R
 import com.example.chatme.adapter.FollowRquestRecyclerAdapter
 import com.example.chatme.databinding.FragmentNotificationBinding
+import com.example.chatme.model.NatificationModel.CommentsModel
+import com.example.chatme.model.NatificationModel.FollowModel
+import com.example.chatme.model.NatificationModel.LikeModel
+import com.example.chatme.model.NatificationModel.RequestModel
 import com.example.chatme.viewmodel.NotificationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

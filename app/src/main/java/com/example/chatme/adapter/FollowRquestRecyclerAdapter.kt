@@ -5,14 +5,20 @@ import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatme.R
+import com.example.chatme.databinding.FollowRequestsViewBinding
+import com.example.chatme.databinding.NotificationCommentViewBinding
+import com.example.chatme.databinding.NotificationFollowViewBinding
+import com.example.chatme.databinding.NotificationLikeButtonBinding
+import com.example.chatme.model.NatificationModel.CommentsModel
+import com.example.chatme.model.NatificationModel.FollowModel
+import com.example.chatme.model.NatificationModel.LikeModel
+import com.example.chatme.model.NatificationModel.RequestModel
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followNotificationModel
 import com.example.chatme.model.followedModel
@@ -22,48 +28,62 @@ import com.example.chatme.util.utils.placeHolder
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import de.hdodenhof.circleimageview.CircleImageView
 
-class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>,val database: FirebaseFirestore,val getAuth: FirebaseUser):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FollowRquestRecyclerAdapter(var requestsList:List<Any>,val database: FirebaseFirestore,val getAuth: FirebaseUser):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_FOLLOW = 0
     private val VIEW_TYPE_REQUEST = 1
+    private val VIEW_TYPE_COMMENT = 2
+    private val VIEW_TYPE_LIKE = 3
 
-    class requestRecyclerVH(view:View) :RecyclerView.ViewHolder(view){
+    class requestRecyclerVH(val binding: FollowRequestsViewBinding) :RecyclerView.ViewHolder(binding.root){
 
-        val requestButtonLayout=view.findViewById<LinearLayout>(R.id.requestButtonLayout)
-        val requestFollowButton=view.findViewById<Button>(R.id.requestFollowButton)
-        val requestFollowButtonLayout=view.findViewById<LinearLayout>(R.id.requestFollowButtonLayout)
-        val authName=view.findViewById<TextView>(R.id.requestAuthName)
-        val name=view.findViewById<TextView>(R.id.requestName)
-        val authImage =view.findViewById<CircleImageView>(R.id.requestImage)
-        val successButton=view.findViewById<Button>(R.id.requestSuccessButton)
-        val deleteButton=view.findViewById<Button>(R.id.requestDeleteButton)
-        val progressBar =view.findViewById<ProgressBar>(R.id.requestRecyclerProgress)
     }
 
-    class notificationRecyclerVH(view:View) :RecyclerView.ViewHolder(view){
-        val followAuthName =view.findViewById<TextView>(R.id.followAuthName)
-        val followImage =view.findViewById<CircleImageView>(R.id.followImage)
-        val notificationFollowProgressBar=view.findViewById<ProgressBar>(R.id.notificationFollowProgressBar)
-        val followButton =view.findViewById<Button>(R.id.followButton)
+    class followRecyclerVH(val binding: NotificationFollowViewBinding) :RecyclerView.ViewHolder(binding.root){
+
+    }
+
+    class commentRecyclerView(val binding :NotificationCommentViewBinding):RecyclerView.ViewHolder(binding.root){
+
+    }
+    class likeRecyclerView(val binding :NotificationLikeButtonBinding):RecyclerView.ViewHolder(binding.root){
+
     }
 
     override fun getItemViewType(position: Int): Int {
         val item = requestsList[position]
-        return if (item.categoryName.equals("follow")) {
-            VIEW_TYPE_FOLLOW
-        } else {
-            VIEW_TYPE_REQUEST
-        }
+        when(item){
+            is  RequestModel->{
+                return VIEW_TYPE_REQUEST
+            }
+                is FollowModel->{
+                    return  VIEW_TYPE_FOLLOW
+                }
+                is CommentsModel ->{
+                    return VIEW_TYPE_COMMENT
+                }
+                is LikeModel ->{
+                    return VIEW_TYPE_LIKE
+                }
+            }
+        return 5
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType==VIEW_TYPE_REQUEST){
-            val view =LayoutInflater.from(parent.context).inflate(R.layout.follow_requests_view,parent,false)
-            requestRecyclerVH(view)
-        }else{
-            val view =LayoutInflater.from(parent.context).inflate(R.layout.notification_follow_view,parent,false)
-            notificationRecyclerVH(view)
-        }
+        val view =LayoutInflater.from(parent.context)
+         if (viewType==VIEW_TYPE_REQUEST){
+            val binding=FollowRequestsViewBinding.inflate(view)
+            return requestRecyclerVH(binding)
+        }else if (viewType==VIEW_TYPE_FOLLOW){
+           val binding =NotificationFollowViewBinding.inflate(view)
+            return followRecyclerVH(binding)
+        }else if (viewType==VIEW_TYPE_COMMENT){
+            val binding=NotificationCommentViewBinding.inflate(view)
+             return commentRecyclerView(binding)
+         }else if (viewType==VIEW_TYPE_LIKE){
+             val binding=NotificationLikeButtonBinding.inflate(view)
+             return likeRecyclerView(binding)
+         }
+        return followRecyclerVH(NotificationFollowViewBinding.inflate(view))
     }
     override fun getItemCount(): Int {
         return if (requestsList.size<8){
@@ -76,88 +96,124 @@ class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.itemViewType==VIEW_TYPE_REQUEST){
             val newHolder=holder as requestRecyclerVH
-            if (requestsList[position].imageUrl.isEmpty()){
-                newHolder.authImage.setImageResource(R.drawable.profil_icon)
+            val list =requestsList[position] as RequestModel
+            if (list.authImage.isEmpty()){
+                newHolder.binding.requestImage.setImageResource(R.drawable.profil_icon)
             }else{
-                newHolder.authImage.downloadUrl(requestsList[position].imageUrl, placeHolder(newHolder.itemView.context))
+                newHolder.binding.requestImage.downloadUrl(list.authImage, placeHolder(newHolder.binding.root.context))
             }
-            newHolder.name.setText(requestsList[position].name)
-            newHolder.authName.setText(requestsList[position].authName)
-            newHolder.successButton.setOnClickListener {
-                requestSuccess(holder,requestsList[position])
+            newHolder.binding.requestName.setText(list.name)
+            newHolder.binding.requestAuthName.setText(list.authName)
+            newHolder.binding.requestSuccessButton.setOnClickListener {
+                requestSuccess(holder,list)
             }
-            holder.deleteButton.setOnClickListener {
+            holder.binding.requestDeleteButton.setOnClickListener {
 
             }
-        }else{
-            val newHolder =holder as notificationRecyclerVH
-            val userReference =database.collection("User Information").document(requestsList[position].mail)
+        }
+        else if (holder.itemViewType==VIEW_TYPE_FOLLOW){
+            val newHolder =holder as followRecyclerVH
+            val lists =requestsList[position] as FollowModel
             val currentReference =database.collection("User Information").document(getAuth.email.toString())
-            if (requestsList[position].imageUrl.isEmpty()){
-                newHolder.followImage.setImageResource(R.drawable.profil_icon)
+            if (lists.authImage.isEmpty()){
+                newHolder.binding.followImage.setImageResource(R.drawable.profil_icon)
             }else{
-                newHolder.followImage.downloadUrl(requestsList[position].imageUrl, placeHolder(newHolder.itemView.context))
+                newHolder.binding.followImage.downloadUrl(lists.authImage, placeHolder(newHolder.binding.root.context))
             }
-            newHolder.followAuthName.setText("${requestsList[position].authName} seni takip etmeye başladı")
-            currentReference.collection("followed").whereEqualTo("authName",requestsList[position].authName).get().addOnSuccessListener {
+            newHolder.binding.followAuthName.setText("${lists.authName} seni takip etmeye başladı")
+            currentReference.collection("followed").whereEqualTo("authName",lists.authName).get().addOnSuccessListener {
                 if (it.isEmpty){
-                    currentReference.collection("sendRequest").whereEqualTo("authName",requestsList[position].authName).get().addOnSuccessListener {
+                    currentReference.collection("sendRequest").whereEqualTo("authName",lists.authName).get().addOnSuccessListener {
                         if (!it.isEmpty){
-                            newHolder.followButton.setText("Bekleniyor")
-                            newHolder.followButton.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
+                            newHolder.binding.followButton.setText("Bekleniyor")
+                            newHolder.binding.followButton.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
                         }else{
-                            newHolder.followButton.setText("Takip et")
-                            newHolder.followButton.setBackgroundResource(R.drawable.button_background_shape)
+                            newHolder.binding.followButton.setText("Takip et")
+                            newHolder.binding.followButton.setBackgroundResource(R.drawable.button_background_shape)
                         }
                     }
                 }else{
-                    newHolder.followButton.setText("Takip")
-                    newHolder.followButton.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
+                    newHolder.binding.followButton.setText("Takip")
+                    newHolder.binding.followButton.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
                 }
             }
-            newHolder.followButton.setOnClickListener {
-                newHolder.followButton.visibility=View.INVISIBLE
-                newHolder.notificationFollowProgressBar.visibility=View.VISIBLE
-                if (newHolder.followButton.text.equals("Takip")){
-                    val dialogBuilder =AlertDialog.Builder(newHolder.itemView.context)
+            newHolder.binding.followButton.setOnClickListener {
+                newHolder.binding.followButton.visibility=View.INVISIBLE
+                newHolder.binding.notificationFollowProgressBar.visibility=View.VISIBLE
+                if (newHolder.binding.followButton.text.equals("Takip")){
+                    val dialogBuilder =AlertDialog.Builder(newHolder.binding.root.context)
                     dialogBuilder.setMessage("Kullanıcı takipten çıkmak istediğinize emin misiniz")
                     dialogBuilder.setTitle("Takipten çık")
                     val alert =dialogBuilder.create()
                     dialogBuilder.setPositiveButton("Çıkar",DialogInterface.OnClickListener { dialog, which ->
-                        unfollow(newHolder,requestsList[position])
-                        newHolder.followButton.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
-                        newHolder.followButton.setText("Takip Et")
+                        unfollow(newHolder,lists)
+                        newHolder.binding.followButton.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
+                        newHolder.binding.followButton.setText("Takip Et")
                     })
                     dialogBuilder.setNegativeButton("İptal et",DialogInterface.OnClickListener { dialog, which ->
                         alert.cancel()
                     })
                     dialogBuilder.show()
-                }else if (newHolder.followButton.text.equals("Takip et")){
+                }else if (newHolder.binding.followButton.text.equals("Takip et")){
                     currentReference.get().addOnSuccessListener {
                         if (it.exists()){
                             val currentUsers=it.toObject(UserInformationModel::class.java)
-                            authFollow(newHolder,requestsList[position],currentUsers!!)
-                            newHolder.followButton.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
-                            newHolder.followButton.setText("Bekleniyor")
+                            authFollow(newHolder,lists,currentUsers!!)
+                            newHolder.binding.followButton.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
+                            newHolder.binding.followButton.setText("Bekleniyor")
                         }
                     }
-                }else if (newHolder.followButton.text.equals("Bekleniyor")){
+                }else if (newHolder.binding.followButton.text.equals("Bekleniyor")){
                     currentReference.get().addOnSuccessListener {
                         if (it.exists()){
                             val currentUsers=it.toObject(UserInformationModel::class.java)
-                            requestDeleteFollow(newHolder,requestsList[position],currentUsers!!)
-                            newHolder.followButton.setBackgroundResource(R.drawable.button_background_shape)
-                            newHolder.followButton.setText("Takip Et")
+                            requestDeleteFollow(newHolder,lists,currentUsers!!)
+                            newHolder.binding.followButton.setBackgroundResource(R.drawable.button_background_shape)
+                            newHolder.binding.followButton.setText("Takip Et")
                         }
                     }
                 }
             }
         }
+        else if (holder.itemViewType==VIEW_TYPE_COMMENT){
+            val newHolder =holder as commentRecyclerView
+            val list =requestsList[position] as CommentsModel
+            newHolder.binding.notificationCommentAuthName.setText("${list.authName} fotoğrafına yorum yaptı:${list.commentText}")
+            database.collection("Posts").document(list.postId).get().addOnSuccessListener {
+                if (it.exists()){
+                    newHolder.binding.notificationCommentAuthImage.downloadUrl(list.authImage,
+                    placeHolder(holder.itemView.context))
+                    newHolder.binding.notificationCommentImage.downloadUrl(it.get("imageUrl") as String,
+                        placeHolder(holder.itemView.context))
+                }
+            }
+            newHolder.binding.notificationCommentLayout.setOnClickListener {
+                val bundle = bundleOf("postId" to list.postId)
+                holder.itemView.findNavController().navigate(R.id.action_notificationFragment_to_postDetailsFragmentFragment2,bundle)
+            }
+        }
+        else if (holder.itemViewType==VIEW_TYPE_LIKE){
+            val newHolder =holder as likeRecyclerView
+            val list =requestsList[position] as LikeModel
+            newHolder.binding.notificationLikeAuthName.setText("${list.authName} fotoğrafını beğendi")
+            database.collection("Posts").document(list.postId).get().addOnSuccessListener {
+                if (it.exists()){
+                    newHolder.binding.notificationLikeAuthImage.downloadUrl(list.authImage,
+                        placeHolder(holder.itemView.context))
+                    newHolder.binding.notificationLikeImage.downloadUrl(it.get("imageUrl") as String,
+                        placeHolder(holder.itemView.context))
+                }
+            }
+            newHolder.binding.notificationLikeLayout.setOnClickListener {
+                val bundle = bundleOf("postId" to list.postId)
+                holder.itemView.findNavController().navigate(R.id.action_notificationFragment_to_postCommentFragment22,bundle)
+            }
+        }
     }
 
     fun authFollow(
-        holder: notificationRecyclerVH,
-        users: followNotificationModel,
+        holder: followRecyclerVH,
+        users: FollowModel,
         currentUsers: UserInformationModel
     ) {
         val currentUser = followedModel(
@@ -189,45 +245,47 @@ class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>
                             users.mail,
                             users.name,
                             users.authName,
-                            users.imageUrl,
+                            users.authImage,
                             Timestamp.now()
                         )
                         currentUserReference.collection("sendRequest").document(users.authName)
                             .set(followAuth).addOnSuccessListener {
                                 Toast.makeText(holder.itemView.context, "İstek gönderildi.", Toast.LENGTH_SHORT)
                                     .show()
-                                holder.followButton.visibility=View.VISIBLE
-                                holder.notificationFollowProgressBar.visibility=View.INVISIBLE
+                                holder.binding.followButton.visibility=View.VISIBLE
+                                holder.binding.notificationFollowProgressBar.visibility=View.INVISIBLE
                             }
                     }
             }
     }
 
-    fun unfollow(holder: notificationRecyclerVH,list:followNotificationModel){
+    fun unfollow(holder: followRecyclerVH, list:FollowModel){
         val currentUser =database.collection("User Information").document(getAuth.email.toString())
         val user =database.collection("User Information").document(list.mail)
         currentUser.collection("followed").document(list.authName).delete().addOnSuccessListener {
             currentUser.get().addOnSuccessListener { current->
                 val data =current.toObject(UserInformationModel::class.java)
                 user.collection("follow").document(data!!.authName).delete().addOnSuccessListener {
-                    Toast.makeText(holder.itemView.context, "Takipten çıkıldı", Toast.LENGTH_SHORT).show()
-                    holder.followButton.visibility=View.VISIBLE
-                    holder.notificationFollowProgressBar.visibility=View.INVISIBLE
+                    user.collection("notification").document("${data.authName} follow").delete().addOnSuccessListener {
+                        Toast.makeText(holder.itemView.context, "Takipten çıkıldı", Toast.LENGTH_SHORT).show()
+                        holder.binding.followButton.visibility=View.VISIBLE
+                        holder.binding.notificationFollowProgressBar.visibility=View.INVISIBLE
+                    }
                 }
             }
         }
     }
 
-    fun updateData(newList:List<followNotificationModel>){
+    fun updateData(newList:List<Any>){
         val diffUtilCallback =CallbackRecycler(requestsList,newList)
         val diifResult=DiffUtil.calculateDiff(diffUtilCallback)
         diifResult.dispatchUpdatesTo(this)
         requestsList=newList
     }
 
-    fun requestSuccess(holder:requestRecyclerVH, users:followNotificationModel){
-        holder.progressBar.visibility=View.VISIBLE
-        holder.successButton.visibility=View.INVISIBLE
+    fun requestSuccess(holder:requestRecyclerVH, users:RequestModel){
+        holder.binding.requestRecyclerProgress.visibility=View.VISIBLE
+        holder.binding.requestSuccessButton.visibility=View.INVISIBLE
         val currentReference =database.collection("User Information").document(getAuth.email.toString())
         val user=database.collection("User Information").document(users.mail)
         user.collection("sendRequest").document(users.authName).delete().addOnSuccessListener {
@@ -240,8 +298,8 @@ class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>
                             user.collection("followed").document(currentUser.authName).set(currentUserFollowed).addOnSuccessListener {
                                 currentReference.collection("notification").document("${users.authName} request").get().addOnSuccessListener {
                                     if (it.exists()){
-                                        val result =it.toObject(followNotificationModel::class.java)
-                                        val item =followNotificationModel("follow",result!!.mail,result.imageUrl,result.authName,result.name, time = Timestamp.now())
+                                        val result =it.toObject(RequestModel::class.java)
+                                        val item =FollowModel(result!!.authName,result.name,result.authImage,"follow",result.mail)
                                         currentReference.collection("notification").document("${users.authName} follow").set(item).addOnSuccessListener {
                                             currentReference.collection("notification").document("${users.authName} request").delete().addOnSuccessListener {
                                                 user.collection("sendRequest").document(currentUser.authName).delete().addOnSuccessListener {
@@ -261,21 +319,21 @@ class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>
     }
 
     fun followController(holder:requestRecyclerVH, authName:String){
-        holder.requestFollowButtonLayout.visibility=View.VISIBLE
-        holder.requestButtonLayout.visibility=View.GONE
+        holder.binding.requestFollowButtonLayout.visibility=View.VISIBLE
+        holder.binding.requestButtonLayout.visibility=View.GONE
         val currentReference =database.collection("User Information").document(getAuth.email.toString())
         currentReference.collection("followed").whereEqualTo("authName",authName).get().addOnSuccessListener {
             if (it.isEmpty){
-                holder.requestFollowButton.setText("Sende onu takip et")
+                holder.binding.requestFollowButton.setText("Sende onu takip et")
             }else{
-                holder.requestFollowButton.setText("Takip")
-                holder.requestFollowButton.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
+                holder.binding.requestFollowButton.setText("Takip")
+                holder.binding.requestFollowButton.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
             }
-            holder.progressBar.visibility=View.GONE
+            holder.binding.requestRecyclerProgress.visibility=View.GONE
         }
     }
 
-    fun requestDeleteFollow(holder: notificationRecyclerVH,users: followNotificationModel, currentUsers: UserInformationModel) {
+    fun requestDeleteFollow(holder: followRecyclerVH, users: FollowModel, currentUsers: UserInformationModel) {
         val userReference = database.collection("User Information").document(users.mail)
         val currentUserReference =
             database.collection("User Information").document(getAuth.email.toString())
@@ -286,13 +344,10 @@ class FollowRquestRecyclerAdapter(var requestsList:List<followNotificationModel>
                         userReference.collection("notification")
                             .document("${currentUsers.authName} request").delete()
                             .addOnSuccessListener {
-                                holder.followButton.visibility=View.VISIBLE
-                                holder.notificationFollowProgressBar.visibility=View.INVISIBLE
+                                holder.binding.followButton.visibility=View.VISIBLE
+                                holder.binding.notificationFollowProgressBar.visibility=View.INVISIBLE
                             }
                     }
             }
-    }
-    fun sendNotification(){
-
     }
 }

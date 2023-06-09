@@ -13,10 +13,36 @@
         <action
             android:id="@+id/action_notificationFragment_to_followRequestFragment"
             app:destination="@id/followRequestFragment" />
+        <action
+            android:id="@+id/action_notificationFragment_to_postDetailsFragmentFragment2"
+            app:destination="@id/postDetailsFragmentFragment2"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_notificationFragment_to_postCommentFragment22"
+            app:destination="@id/postCommentFragment2" />
     </fragment>
     <fragment
         android:id="@+id/followRequestFragment"
         android:name="com.example.chatme.view.FollowRequestFragment"
         android:label="fragment_follow_request"
         tools:layout="@layout/fragment_follow_request" />
+    <fragment
+        android:id="@+id/postDetailsFragmentFragment2"
+        android:name="com.example.chatme.view.PostDetailsFragmentFragment"
+        android:label="fragment_post_details"
+        tools:layout="@layout/fragment_post_details" >
+        <argument
+            android:name="postId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/postCommentFragment2"
+        android:name="com.example.chatme.view.PostCommentFragment"
+        android:label="fragment_post_comment"
+        tools:layout="@layout/fragment_post_comment" >
+        <argument
+            android:name="postId"
+            app:argType="string" />
+    </fragment>
 </navigation>

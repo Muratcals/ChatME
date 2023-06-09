@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import com.example.chatme.R
 import com.example.chatme.adapter.FollowRquestRecyclerAdapter
 import com.example.chatme.databinding.FragmentSearchProfilBinding
+import com.example.chatme.model.NatificationModel.FollowModel
+import com.example.chatme.model.NatificationModel.RequestModel
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followNotificationModel
 import com.example.chatme.model.followedModel
@@ -99,14 +101,12 @@ class SearchProfilViewModel @Inject constructor(
             database.collection("User Information").document(getAuth.email.toString())
         userReference.collection("request").document(currentUsers.authName).set(currentUser)
             .addOnSuccessListener {
-                val notificationModel = followNotificationModel(
-                    "request",
-                    currentUser.mail,
-                    currentUser.imageUrl,
+                val notificationModel = RequestModel(
                     currentUser.authName,
-                    currentUsers.name,
-                    state = false,
-                    Timestamp.now()
+                    currentUser.name,
+                    currentUser.imageUrl,
+                    "request",
+                    currentUser.mail
                 )
                 userReference.collection("notification")
                     .document("${currentUser.authName} request").set(notificationModel)
@@ -155,19 +155,17 @@ class SearchProfilViewModel @Inject constructor(
                                             .addOnSuccessListener {
                                                 currentUserReference.collection("notification")
                                                     .document("${users.authName} request").get()
-                                                    .addOnSuccessListener {
-                                                        if (it.exists()) {
+                                                    .addOnSuccessListener {requestState->
+                                                        if (requestState.exists()) {
                                                             val result =
-                                                                it.toObject(
-                                                                    followNotificationModel::class.java
+                                                                requestState.toObject(
+                                                                    RequestModel::class.java
                                                                 )
-                                                            val item = followNotificationModel(
-                                                                "follow",
-                                                                result!!.mail,
-                                                                result.imageUrl,
-                                                                result.authName,
+                                                            val item = FollowModel(
+                                                                result!!.authName,
                                                                 result.name,
-                                                                time = Timestamp.now()
+                                                                result.authImage,
+                                                                "follow",result.mail
                                                             )
                                                             currentUserReference.collection("notification")
                                                                 .document("${users.authName} request")

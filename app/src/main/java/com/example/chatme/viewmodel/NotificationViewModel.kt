@@ -2,6 +2,10 @@ package com.example.chatme.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.chatme.model.NatificationModel.CommentsModel
+import com.example.chatme.model.NatificationModel.FollowModel
+import com.example.chatme.model.NatificationModel.LikeModel
+import com.example.chatme.model.NatificationModel.RequestModel
 import com.example.chatme.model.followNotificationModel
 import com.example.chatme.model.followedModel
 import com.google.firebase.auth.FirebaseAuth
@@ -18,7 +22,7 @@ class NotificationViewModel @Inject constructor(
 ) : ViewModel() {
 
     val followRequest =MutableLiveData<List<followNotificationModel>?>()
-    val notification=MutableLiveData<List<followNotificationModel>?>()
+    val notification=MutableLiveData<List<Any>?>()
     val progress=MutableLiveData<Boolean>()
     private val  currentUser=database.collection("User Information").document(getAuth.email.toString())
     fun getFollowRequestData(){
@@ -33,9 +37,29 @@ class NotificationViewModel @Inject constructor(
     }
 
     fun getAllNotification(){
+        progress.value=true
         currentUser.collection("notification").addSnapshotListener { value, error ->
-            val followedModel =value?.toObjects(followNotificationModel::class.java)
-            notification.value=followedModel
+            val followArray = mutableListOf<Any>()
+            if (value!=null){
+                for (document in value!!.documents){
+                    val categoryName =document.get("categoryName")
+                    if (categoryName!!.equals("request")) {
+                        val requestModel = document.toObject(RequestModel::class.java)
+                        followArray.add(requestModel!!)
+                    } else if (categoryName.equals("like")) {
+                        val likeModel = document.toObject(LikeModel::class.java)
+                        followArray.add(likeModel!!)
+                    }else if (categoryName.equals("comment")) {
+                        val commentsModel = document.toObject(CommentsModel::class.java)
+                        followArray.add(commentsModel!!)
+                    } else if (categoryName.equals("follow")) {
+                        val followModel = document.toObject(FollowModel::class.java)
+                        followArray.add(followModel!!)
+                    }
+                 }
+            }
+            notification.value=followArray
+            progress.value=false
         }
     }
 

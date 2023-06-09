@@ -25,9 +25,8 @@ class RegisterViewModel @Inject constructor(
                 auth.fetchSignInMethodsForEmail(userInformation.mail).addOnSuccessListener {
                     if (it.signInMethods?.isEmpty()==true){
                         if (passwordController(activity.applicationContext,password)){
-                            database.collection("User Information").document(userInformation.mail).set(userInformation).addOnSuccessListener { databaseResult->
+                            database.collection("User Information").document(userInformation.authName).set(userInformation).addOnSuccessListener { databaseResult->
                                 database.collection("User Information").document(userInformation.mail).get().addOnSuccessListener { references->
-                                    references.reference.collection("follow").add("").addOnSuccessListener {
                                         auth.createUserWithEmailAndPassword(userInformation.mail,password).addOnCompleteListener { authResult->
                                             if (authResult.isSuccessful){
                                                 Toast.makeText(activity.applicationContext, "Kayıt başarılı. Giriş yapabilirsin", Toast.LENGTH_SHORT).show()
@@ -40,7 +39,6 @@ class RegisterViewModel @Inject constructor(
                                                 }
                                             }
                                         }
-                                    }
                                 }
                             }.addOnFailureListener {
                                 Toast.makeText(activity.applicationContext, it.localizedMessage, Toast.LENGTH_SHORT).show()

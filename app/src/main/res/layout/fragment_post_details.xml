@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".view.PostDetailsFragmentFragment">
 
-
     <include layout="@layout/ana_menu_post_view" android:id="@+id/profilPostDetailsLayout"/>
 
 </FrameLayout>

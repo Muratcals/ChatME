@@ -1,11 +1,9 @@
-package com.example.chatme.viewmodel
+package com.example.chatme
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
-import com.example.chatme.AddPostActivity
-import com.example.chatme.R
 import com.example.chatme.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore

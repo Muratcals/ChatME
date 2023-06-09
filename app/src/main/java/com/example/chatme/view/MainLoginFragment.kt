@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.chatme.viewmodel.MainActivity
+import com.example.chatme.MainActivity
 import com.example.chatme.databinding.FragmentMainLoginBinding
 import com.example.chatme.viewmodel.MainLoginViewModel
 import com.google.firebase.auth.FirebaseAuth

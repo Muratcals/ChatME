@@ -1,4 +1,4 @@
-package com.example.chatme.view
+package com.example.chatme.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth

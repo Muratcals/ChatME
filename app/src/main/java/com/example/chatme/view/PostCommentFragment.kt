@@ -10,11 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatme.adapter.CommentsRecyclerAdapter
 import com.example.chatme.databinding.FragmentPostCommentBinding
 import com.example.chatme.model.CommentModel
+import com.example.chatme.model.NatificationModel.CommentsModel
+import com.example.chatme.model.PostModel
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.util.utils.placeHolder
 import com.example.chatme.viewmodel.PostCommentViewModel
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ktx.toObject
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.UUID
 import javax.inject.Inject
@@ -94,10 +97,13 @@ class PostCommentFragment : Fragment() {
                 }
             }
             binding.shareCommentButton.setOnClickListener {
-                viewModel.database.collection("User Information").document(viewModel.getAuth.email.toString()).get().addOnSuccessListener {
-                    val currentUserInformation=it.toObject(UserInformationModel::class.java)
-                    val commentModelData=CommentModel(UUID.randomUUID().toString(),currentUserInformation!!.authName,binding.commentEdittext.text.toString(),currentUserInformation.profilImage)
-                    viewModel.postComments(view,postId,commentModelData)
+                viewModel.database.collection("Posts").document(postId).get().addOnSuccessListener {
+                    if (it.exists()){
+                        val sharedAuthModel =it.toObject(PostModel::class.java)
+                        viewModel.postComments(view,postId,binding.commentEdittext.text.toString(),sharedAuthModel!!.userWhoShared)
+                        binding.commentEdittext.text.clear()
+                    }
+
                 }
 
             }

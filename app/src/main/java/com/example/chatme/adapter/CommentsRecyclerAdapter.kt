@@ -1,6 +1,7 @@
 package com.example.chatme.adapter
 
 import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.chatme.R
 import com.example.chatme.model.CommentModel
+import com.example.chatme.model.NatificationModel.CommentsModel
 import com.example.chatme.model.PostModel
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.UserWhoLikesModel
@@ -28,7 +30,7 @@ import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
 import de.hdodenhof.circleimageview.CircleImageView
 
-class CommentsRecyclerAdapter(var commentList:List<CommentModel>,val database:FirebaseFirestore,val getAuth: FirebaseUser,val documentId: String): RecyclerView.Adapter<CommentsRecyclerAdapter.CommentsVH>() {
+class CommentsRecyclerAdapter(var commentList:List<CommentsModel>,val database:FirebaseFirestore,val getAuth: FirebaseUser,val documentId: String): RecyclerView.Adapter<CommentsRecyclerAdapter.CommentsVH>() {
     class CommentsVH(view: View):RecyclerView.ViewHolder(view) {
         val commentsAuthImage=view.findViewById<CircleImageView>(R.id.commentsDetailsAuthImage)
         val commentsAuthName=view.findViewById<TextView>(R.id.commentsUserWhoShared)
@@ -48,15 +50,10 @@ class CommentsRecyclerAdapter(var commentList:List<CommentModel>,val database:Fi
     }
 
     override fun onBindViewHolder(holder: CommentsVH, position: Int) {
-        database.collection("User Information").document(getAuth.email.toString()).get().addOnSuccessListener {
-            if (it.exists()){
-                val userInformation =it.toObject(UserInformationModel::class.java)
-                if (userInformation?.authName.equals(commentList[position].commenter)){
-                    holder.commentEllipsis.visibility=View.VISIBLE
-                }else{
-                    holder.commentEllipsis.visibility=View.GONE
-                }
-            }
+        if (getAuth.email.toString().equals(commentList[position].mail)){
+            holder.commentEllipsis.visibility=View.VISIBLE
+        }else{
+            holder.commentEllipsis.visibility=View.GONE
         }
         holder.commentEllipsis.setOnClickListener {
             if (holder.commentEllipsisDelete.isVisible){
@@ -70,19 +67,17 @@ class CommentsRecyclerAdapter(var commentList:List<CommentModel>,val database:Fi
             builder.setTitle("Yorumu sil")
             builder.setMessage("Bu yorumu silmek istediğinize emin misiniz ?")
             builder.setPositiveButton("Sil"){ dialog,_->
-                database.collection("Posts").document(documentId).collection("comments").document(commentList[position].commentId).delete().addOnSuccessListener {
-                    Toast.makeText(holder.itemView.context, "Yorum silindi.", Toast.LENGTH_SHORT).show()
-                }
+                deleteComment(holder.itemView.context,commentList[position])
             }
             builder.setNegativeButton("İptal et"){dialog,_->
                 dialog.cancel()
             }
             builder.show()
         }
-        updateTime(holder,commentList[position].commentTime)
+        updateTime(holder,commentList[position].time)
         holder.commenstExplanation.setText(commentList[position].commentText)
-        holder.commentsAuthName.setText(commentList[position].commenter)
-        holder.commentsAuthImage.downloadUrl(commentList[position].commenterImage, placeHolder(holder.itemView.context))
+        holder.commentsAuthName.setText(commentList[position].authName)
+        holder.commentsAuthImage.downloadUrl(commentList[position].authImage, placeHolder(holder.itemView.context))
     }
 
 
@@ -103,10 +98,22 @@ class CommentsRecyclerAdapter(var commentList:List<CommentModel>,val database:Fi
         }
     }
 
-    fun updateData(list:List<CommentModel>){
+    fun updateData(list:List<CommentsModel>){
         val diffUtil = CallbackRecycler(commentList,list)
         val calculate = DiffUtil.calculateDiff(diffUtil)
         commentList=list
         calculate.dispatchUpdatesTo(this)
+    }
+
+    fun deleteComment(context: Context,comment:CommentsModel,){
+        database.collection("Posts").document(documentId).collection("comments").document(comment.commentId).delete().addOnSuccessListener {
+            database.collection("Posts").document(comment.postId).get().addOnSuccessListener {post->
+                val postContent =post.toObject(PostModel::class.java)
+                database.collection("User Information").document(comment.mail).collection("notification").document(postContent!!.userWhoShared).delete().addOnSuccessListener {
+                    Toast.makeText(context, "Yorum silindi", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
     }
 }

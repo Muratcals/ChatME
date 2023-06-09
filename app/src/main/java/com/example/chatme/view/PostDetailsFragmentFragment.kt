@@ -1,17 +1,15 @@
 package com.example.chatme.view
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.chatme.R
-import com.example.chatme.adapter.PostRecyclerAdapter
 import com.example.chatme.databinding.FragmentPostDetailsBinding
 import com.example.chatme.model.PostModel
 import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.util.utils.placeHolder
+import com.example.chatme.viewmodel.PostDetailsViewModel
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -61,7 +59,7 @@ class PostDetailsFragmentFragment : Fragment() {
                         }
                     }
                     viewModel.database.collection("User Information").document(viewModel.getAuth.email.toString()).get().addOnSuccessListener {
-                        it.reference.collection("userWhoLikes").document(it.get("authName") as String).get().addOnSuccessListener {
+                        it.reference.collection("userWhoLike").document(it.get("authName") as String).get().addOnSuccessListener {
                             if (it.exists()){
                                 binding.profilPostDetailsLayout.anaMenuPostLikeAnimationButton.progress=1F
                             }
