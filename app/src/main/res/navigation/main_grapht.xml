@@ -13,17 +13,23 @@
         <action
             android:id="@+id/action_mainPageFragment_to_searchProfilFragment3"
             app:destination="@id/searchProfilFragment3"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@android:anim/slide_out_right"
+            app:exitAnim="@android:anim/slide_in_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
         <action
             android:id="@+id/action_mainPageFragment_to_proffilFragment3"
             app:destination="@id/proffilFragment3"
-            app:enterAnim="@android:anim/slide_in_left"
+            app:enterAnim="@android:anim/slide_out_right"
+            app:exitAnim="@android:anim/slide_in_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_mainPageFragment_to_postCommentFragment"
             app:destination="@id/postCommentFragment"
-            app:enterAnim="@android:anim/slide_in_left"
+            app:enterAnim="@android:anim/slide_out_right"
+            app:exitAnim="@android:anim/slide_in_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment

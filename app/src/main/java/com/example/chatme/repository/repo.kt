@@ -25,8 +25,9 @@ class repo @Inject constructor(
     val auth:FirebaseAuth,
     val getAuth:FirebaseUser
 ) {
-    val authList=MutableLiveData<List<UserInformationModel>>()
 
+
+    /*
     fun getAllUser(){
         MainScope().launch {
             val querySnapshot=database.collection("User Information").get().await()
@@ -34,6 +35,8 @@ class repo @Inject constructor(
             authList.value=items
         }
     }
+
+     */
     /*
     fun getSearchAuth (char:String){
         MainScope().launch {

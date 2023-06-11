@@ -23,10 +23,9 @@ class MainPageViewModel @Inject constructor(
     val progress = MutableLiveData<Boolean>()
     fun getPostList() {
         progress.value = true
-        database.collection("Posts").addSnapshotListener { value, _ ->
+        database.collection("Posts").get().addOnSuccessListener { value ->
             if (value != null) {
                 val postListResult = value.toObjects(PostModel::class.java)
-                val followedInPost = ArrayList<PostModel>()
                 postList.value=postListResult
                 progress.value=false
             }

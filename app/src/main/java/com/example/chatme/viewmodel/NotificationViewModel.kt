@@ -21,7 +21,7 @@ class NotificationViewModel @Inject constructor(
     val getAuth:FirebaseUser
 ) : ViewModel() {
 
-    val followRequest =MutableLiveData<List<followNotificationModel>?>()
+    val followRequest =MutableLiveData<List<RequestModel>?>()
     val notification=MutableLiveData<List<Any>?>()
     val progress=MutableLiveData<Boolean>()
     private val  currentUser=database.collection("User Information").document(getAuth.email.toString())
@@ -29,8 +29,8 @@ class NotificationViewModel @Inject constructor(
         progress.value=true
         currentUser.collection("notification").whereEqualTo("categoryName","request").get().addOnSuccessListener { value ->
             if (value!=null){
-                val followedModel =value.toObjects(followNotificationModel::class.java)
-                followRequest.value=followedModel
+                val requestModel=value.toObjects(RequestModel::class.java)
+                followRequest.value=requestModel
                 progress.value=false
             }
         }
@@ -38,7 +38,7 @@ class NotificationViewModel @Inject constructor(
 
     fun getAllNotification(){
         progress.value=true
-        currentUser.collection("notification").addSnapshotListener { value, error ->
+        currentUser.collection("notification").orderBy("time",Query.Direction.DESCENDING).addSnapshotListener { value, error ->
             val followArray = mutableListOf<Any>()
             if (value!=null){
                 for (document in value!!.documents){

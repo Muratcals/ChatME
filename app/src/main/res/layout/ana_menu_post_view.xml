@@ -2,16 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/backgroundColor">
+    android:background="@color/backgroundColor"
+    android:paddingBottom="@dimen/_20sdp">
 
     <include
-        android:id="@+id/mainPageFragmentToolbar"
-        layout="@layout/main_page_toolbar"
+        android:id="@+id/postDetailsToolbar"
+        layout="@layout/profil_edit_details_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
 
     <LinearLayout
         android:id="@+id/linearLayout5"
@@ -21,7 +24,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainPageFragmentToolbar">
+        app:layout_constraintTop_toBottomOf="@+id/postDetailsToolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -80,9 +83,7 @@
             android:minHeight="@dimen/_150sdp"
             android:scaleType="fitCenter"
             android:src="@drawable/indir2"
-            android:visibility="invisible"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="74dp" />
+            android:visibility="visible" />
 
         <View
             android:layout_width="match_parent"
@@ -122,10 +123,9 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/anaMenuPostSaveAnimationButton"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:padding="@dimen/_5sdp"
                 android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

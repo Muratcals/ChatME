@@ -1,12 +1,20 @@
 package com.example.chatme.util
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -17,6 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import io.reactivex.plugins.RxJavaPlugins
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.UUID
 
 object utils {
 
@@ -55,5 +64,6 @@ object utils {
             // Örneğin, stil, renk, vb. ayarları burada yapabilirsiniz
         }
     }
+
 
 }

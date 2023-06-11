@@ -167,13 +167,13 @@
             <Button
                 android:id="@+id/profilEditButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:background="@drawable/button_background_shape"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:text="Profili Düzenle"
                 android:textAllCaps="false"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_10ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -188,39 +188,113 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/postListImage"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:src="@drawable/grid_icon"
-                android:padding="@dimen/_5sdp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_marginStart="@dimen/_50sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/savePostListImage"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:src="@drawable/post_save_icon"
+                <ImageView
+                    android:id="@+id/postListImage"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:src="@drawable/grid_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/PostListLine"
+                    android:layout_width="@dimen/_75sdp"
+                    android:layout_height="3dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/white" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_marginEnd="@dimen/_50sdp"
                 android:padding="@dimen/_2sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/savePostListImage"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:src="@drawable/post_save_icon"
+                    android:layout_gravity="center_horizontal" />
+                <View
+                    android:id="@+id/savePostListLine"
+                    android:layout_width="@dimen/_75sdp"
+                    android:layout_height="3dp"
+                    android:visibility="invisible"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/white" />
+            </LinearLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userImagesRecycler"
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_5sdp"
             android:paddingStart="@dimen/_10sdp"
-            android:paddingEnd="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp" >
 
-            tools:ignore="RtlSymmetry" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userImagesRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/emptyImageProfilLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/camera_icon"
+                    android:padding="@dimen/_5sdp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginHorizontal="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:text="Henüz hiçbir gönderi yok."
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp"/>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    
     </LinearLayout>
 
     <ProgressBar

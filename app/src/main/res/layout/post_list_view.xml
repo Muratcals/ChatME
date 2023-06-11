@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:layout_width="2dp"
+        android:layout_width="1dp"
         android:layout_height="@dimen/_100sdp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,7 +26,7 @@
 
     <View
         android:layout_width="@dimen/_100sdp"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

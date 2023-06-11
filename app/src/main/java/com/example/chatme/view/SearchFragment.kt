@@ -25,7 +25,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
 
-    @Inject lateinit var repository:repo
     @Inject lateinit var viewModel: SearchViewModel
     @Inject lateinit var getAuth: FirebaseUser
     private lateinit var binding:FragmentSearchBinding
@@ -40,11 +39,11 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        repository.getAllUser()
+        viewModel.getAllUser()
         val adapter =SearchRecyclerAdapter(arrayListOf(),getAuth)
         binding.searchRecycler.adapter=adapter
         binding.searchRecycler.layoutManager=LinearLayoutManager(requireContext())
-        repository.authList.observe(viewLifecycleOwner){ list->
+        viewModel.authList.observe(viewLifecycleOwner){ list->
             binding.searcEdittext.addTextChangedListener {
                 val adapterList=ArrayList<UserInformationModel>()
                 for (item in list){

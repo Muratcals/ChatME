@@ -10,6 +10,7 @@ import com.example.chatme.adapter.FollowRquestRecyclerAdapter
 import com.example.chatme.databinding.FragmentSearchProfilBinding
 import com.example.chatme.model.NatificationModel.FollowModel
 import com.example.chatme.model.NatificationModel.RequestModel
+import com.example.chatme.model.PostModel
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followNotificationModel
 import com.example.chatme.model.followedModel
@@ -30,6 +31,7 @@ class SearchProfilViewModel @Inject constructor(
     val progress = MutableLiveData<Boolean>()
     val authInformation = MutableLiveData<UserInformationModel>()
     val currentUserInformation = MutableLiveData<UserInformationModel>()
+    val userPost =MutableLiveData<List<PostModel>>()
 
     fun authFollowController(binding: FragmentSearchProfilBinding, mail: String, authName: String) {
         progress.value = true
@@ -264,6 +266,13 @@ class SearchProfilViewModel @Inject constructor(
                 followed.value = followedResult.toObjects(followedModel::class.java)
                 progress.value = false
             }
+        }
+    }
+
+    fun getUserImage(users: UserInformationModel){
+        database.collection("Posts").whereEqualTo("userWhoShared",users.authName).get().addOnSuccessListener {
+            val posts=it.toObjects(PostModel::class.java)
+            userPost.value=posts
         }
     }
 }

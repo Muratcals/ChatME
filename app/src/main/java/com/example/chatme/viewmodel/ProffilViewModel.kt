@@ -60,7 +60,7 @@ class ProffilViewModel @Inject constructor(
     }
 
     fun savePost(){
-        database.collection("User Information").document(getAuth.email.toString()).collection("savePost").get().addOnSuccessListener {
+        database.collection("User Information").document(getAuth.email.toString()).collection("saveImage").get().addOnSuccessListener {
             val savePostListResult=it.toObjects(PostModel::class.java)
             savePostList.value=savePostListResult
         }
@@ -76,4 +76,5 @@ class ProffilViewModel @Inject constructor(
             }
         }
     }
+
 }

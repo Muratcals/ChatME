@@ -31,9 +31,9 @@ class FollowRequestFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = FollowRquestRecyclerAdapter(arrayListOf(), viewModel.database, viewModel.getAuth)
         binding.followRequestToollbar.profilDetailseToolbarTitle.setText("Takip istekleri")
         viewModel.getFollowRequestData()
+        binding.followRequestToollbar.profilDetailseToolbarSuccess.visibility=View.GONE
         viewModel.progress.observe(viewLifecycleOwner){
             if (it){
                 binding.followRequestProgress.visibility=View.VISIBLE
@@ -49,14 +49,15 @@ class FollowRequestFragment : Fragment() {
         binding.followRequestToollbar.profilDetailseToolbarSuccess.setOnClickListener {
             requireActivity().onBackPressed()
         }
-        binding.followRequestRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.followRequestRecycler.adapter = adapter
+
         viewModel.followRequest.observe(viewLifecycleOwner) {
             if (viewModel.followRequest.value?.isEmpty() == true) {
                 binding.followRequestRecycler.visibility = View.GONE
                 binding.notRequestLayout.visibility = View.VISIBLE
             } else {
-                adapter.updateData(it!!)
+                val adapter = FollowRquestRecyclerAdapter(it!!, viewModel.database, viewModel.getAuth)
+                binding.followRequestRecycler.layoutManager = LinearLayoutManager(requireContext())
+                binding.followRequestRecycler.adapter = adapter
                 binding.followRequestRecycler.visibility = View.VISIBLE
                 binding.notRequestLayout.visibility = View.GONE
             }

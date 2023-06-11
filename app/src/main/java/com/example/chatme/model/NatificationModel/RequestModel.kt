@@ -8,6 +8,7 @@ class RequestModel (
     val authImage:String,
     val categoryName:String,
     val mail:String,
+    val state:Boolean=false,
     val time:Timestamp=Timestamp.now()
     ){
         constructor():this("","","","","")

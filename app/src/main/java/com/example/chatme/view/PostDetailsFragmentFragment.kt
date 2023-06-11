@@ -27,10 +27,14 @@ class PostDetailsFragmentFragment : Fragment() {
         binding= FragmentPostDetailsBinding.inflate(layoutInflater)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.profilPostDetailsLayout.mainPageFragmentToolbar.root.visibility=View.GONE
+        binding.profilPostDetailsLayout.postDetailsToolbar.root.visibility=View.VISIBLE
+        binding.profilPostDetailsLayout.postDetailsToolbar.profilDetailseToolbarSuccess.visibility=View.GONE
+        binding.profilPostDetailsLayout.postDetailsToolbar.profilDetailsToolbarBackPage.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+        binding.profilPostDetailsLayout.postDetailsToolbar.profilDetailseToolbarTitle.setText("Gönderiler")
         arguments?.let {
             val postId=it.getString("postId")
             viewModel.database.collection("Posts").document(postId!!).get().addOnSuccessListener {

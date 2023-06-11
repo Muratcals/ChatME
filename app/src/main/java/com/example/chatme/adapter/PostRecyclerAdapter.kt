@@ -20,6 +20,7 @@ import com.example.chatme.model.PostModel
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.UserWhoLikesModel
 import com.example.chatme.util.CallbackRecyclerPost
+import com.example.chatme.util.utils
 import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.util.utils.placeHolder
 import com.google.firebase.Timestamp
@@ -66,13 +67,18 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
         if (!postList[position].userWhoShared.equals(currentUserInformationModel.authName)){
             holder.ellipsisDelete.visibility=View.GONE
         }
+        database.collection("User Information").document(currentUserInformationModel.mail).collection("saveImage").document(postList[position].id).get().addOnSuccessListener {
+            if (it.exists()){
+                holder.saveButton.progress=1F
+            }else{
+                holder.saveButton.progress=0F
+            }
+        }
         database.collection("Posts").document(postList[position].id).collection("userWhoLike").whereEqualTo("authName",currentUserInformationModel.authName).get().addOnSuccessListener {
             if (!it.isEmpty){
                 holder.likeAnimation.progress=1F
-                holder.likeAnimation.invalidate()
-            }else{
+            }else {
                 holder.likeAnimation.progress=0F
-                holder.likeAnimation.invalidate()
             }
         }
         database.collection("Posts").document(postList[position].id).collection("comments").get().addOnSuccessListener {
@@ -83,15 +89,12 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
                 holder.commentsIsView.setText("${it.size()} yorumun tümünü gör")
             }
         }
-        database.collection("Posts").document(postList[position].id).collection("userWhoLike").get().addOnSuccessListener {
-            if (!it.isEmpty){
-                holder.numberOfLikes.visibility=View.VISIBLE
-                holder.numberOfLikes.setText("${it.size()} beğenme")
-            }else{
-                holder.numberOfLikes.visibility=View.GONE
-            }
+        if (postList[position].numberOfLikes!=0){
+            holder.numberOfLikes.visibility=View.VISIBLE
+            holder.numberOfLikes.setText("${postList[position].numberOfLikes} beğenme")
+        }else{
+            holder.numberOfLikes.visibility=View.GONE
         }
-
         if (postList[position].explanation.isNotEmpty()){
             holder.explanationLayout.visibility=View.VISIBLE
             holder.explanationAuthName.setText(postList[position].userWhoShared)
@@ -101,7 +104,7 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
         }
 
         holder.likeAnimation.setOnClickListener {
-            likeImages(holder,postList[position],postList[position].numberOfLikes,postList[position].userWhoShared)
+            likeImages(holder,postList[position],postList[position].userWhoShared)
         }
         holder.saveButton.setOnClickListener {
             holder.saveButton.playAnimation()
@@ -137,6 +140,12 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
         holder.ellipsisDelete.setOnClickListener {
             ellipsisDelete(holder,postList[position].imageUrl)
         }
+        holder.saveButton.setOnClickListener {
+            saveImage(holder,postList[position])
+        }
+        holder.ellipsisSave.setOnClickListener {
+            saveImage(holder,postList[position])
+        }
     }
 
     override fun getItemCount(): Int {
@@ -165,52 +174,70 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
                 }
             }
         }
-        alertBuilder.setNegativeButton("İptal et") { dialog, which ->
+        alertBuilder.setNegativeButton("İptal et") { dialog, _ ->
             dialog.cancel()
         }
 
     }
 
-    fun likeImages(holder: PostVH, document: PostModel, numberOfLikes:Int,authName:String){
-        database.collection("Posts").document(document.id).collection("userWhoLike").whereEqualTo("authName",currentUserInformationModel.authName).get().addOnSuccessListener {
-            if (it.isEmpty()){
+    fun likeImages(holder: PostVH, document: PostModel,authName:String){
+            if (holder.likeAnimation.progress==0F){
                 holder.likeAnimation.playAnimation()
-                holder.likeAnimation.progress=1F
-                val postLikeModel =UserWhoLikesModel(currentUserInformationModel.mail,currentUserInformationModel.name,currentUserInformationModel.authName,currentUserInformationModel.profilImage,Timestamp.now())
-                val notificationLikeModel =LikeModel(document.id,currentUserInformationModel.authName,currentUserInformationModel.profilImage,document.imageUrl,"like",currentUserInformationModel.mail)
-                database.collection("Posts").document(document.id).collection("userWhoLike").document(currentUserInformationModel.authName).set(postLikeModel).addOnSuccessListener {
-                    database.collection("Posts").document(document.id).update("numberOfLikes",numberOfLikes+1).addOnSuccessListener {
-                        MainScope().launch(Dispatchers.IO) {
-                            database.collection("User Information").whereEqualTo("authName",authName).get().addOnSuccessListener {userModel->
-                                val userInformationModel=userModel.toObjects(UserInformationModel::class.java)
-                                if (!userInformationModel[0].mail.equals(FirebaseAuth.getInstance().currentUser!!.email.toString())){
-                                    database.collection("User Information").document(userInformationModel[0].mail).collection("notification").document("${currentUserInformationModel.authName} like").set(notificationLikeModel).addOnSuccessListener {
+                if (holder.numberOfLikes.text.isEmpty()){
+                    holder.numberOfLikes.setText("1 beğenme")
+                    holder.numberOfLikes.visibility=View.VISIBLE
+                }else{
+                    val parts = holder.numberOfLikes.text.toString().split(" ")
+                    val number = parts[0]
+                    holder.numberOfLikes.setText("${number.toInt()+1} beğenme")
+                }
 
+                MainScope().launch(Dispatchers.IO) {
+                    val postLikeModel =UserWhoLikesModel(currentUserInformationModel.mail,currentUserInformationModel.name,currentUserInformationModel.authName,currentUserInformationModel.profilImage,Timestamp.now())
+                    val notificationLikeModel =LikeModel(document.id,currentUserInformationModel.authName,currentUserInformationModel.profilImage,document.imageUrl,"like",currentUserInformationModel.mail)
+                    database.collection("Posts").document(document.id).collection("userWhoLike").document(currentUserInformationModel.authName).set(postLikeModel).addOnSuccessListener {
+                        database.collection("Posts").document(document.id).collection("userWhoLike").get().addOnSuccessListener {
+                            database.collection("Posts").document(document.id).update("numberOfLikes",it.size()).addOnSuccessListener {
+                                database.collection("User Information").whereEqualTo("authName",authName).get().addOnSuccessListener {userModel->
+                                    val userInformationModel=userModel.toObjects(UserInformationModel::class.java)
+                                    if (!userInformationModel[0].mail.equals(FirebaseAuth.getInstance().currentUser!!.email.toString())){
+                                        database.collection("User Information").document(userInformationModel[0].mail).collection("notification").document("${currentUserInformationModel.authName} like").set(notificationLikeModel).addOnSuccessListener {
+
+                                        }
                                     }
                                 }
-
                             }
                         }
-
                     }
                 }
             }else{
-                holder.likeAnimation.clearAnimation()
-                database.collection("Posts").document(document.id).collection("userWhoLike").document(currentUserInformationModel.authName).delete().addOnSuccessListener {
-                    database.collection("Posts").document(document.id).update("numberOfLikes",numberOfLikes-1).addOnSuccessListener {
+                holder.likeAnimation.progress=0F
+                val parts = holder.numberOfLikes.text.toString().split(" ")
+                val number = parts[0]
+                if (number.toInt()!=1){
+                    holder.numberOfLikes.setText("${number.toInt()-1} beğenme")
+                }else{
+                    holder.numberOfLikes.setText("")
+                    holder.numberOfLikes.visibility=View.GONE
+                }
+                MainScope().launch(Dispatchers.IO) {
+                    database.collection("Posts").document(document.id).collection("userWhoLike").document(currentUserInformationModel.authName).delete().addOnSuccessListener {
+                        database.collection("Posts").document(document.id).collection("userWhoLike").get().addOnSuccessListener {
+                            database.collection("Posts").document(document.id).update("numberOfLikes",it.size()).addOnSuccessListener {
 
+                            }
+                        }
                     }
                 }
             }
-        }
 
     }
 
     fun updateData(list:List<PostModel>){
         val diffUtil =CallbackRecyclerPost(postList,list)
         val calculate =DiffUtil.calculateDiff(diffUtil)
-        postList=list
         calculate.dispatchUpdatesTo(this)
+        postList=list
     }
 
     fun timeUpdate(holder : PostVH,time:Timestamp){
@@ -229,7 +256,21 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
         }
     }
 
-    fun saveImage(){
+    fun saveImage(holder: PostVH,postModel: PostModel){
+        val currentUserReference =database.collection("User Information").document(currentUserInformationModel.mail).collection("saveImage")
+        currentUserReference.whereEqualTo("id",postModel.id).get().addOnSuccessListener {
+            if (it.isEmpty){
+                holder.saveButton.playAnimation()
+                currentUserReference.document(postModel.id).set(postModel).addOnSuccessListener {
+
+                }
+            }else{
+                holder.saveButton.progress=0F
+                currentUserReference.document(postModel.id).delete().addOnSuccessListener {
+
+                }
+            }
+        }
 
     }
 }

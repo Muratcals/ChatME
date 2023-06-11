@@ -56,15 +56,15 @@ class FollowRquestRecyclerAdapter(var requestsList:List<Any>,val database: Fireb
             is  RequestModel->{
                 return VIEW_TYPE_REQUEST
             }
-                is FollowModel->{
-                    return  VIEW_TYPE_FOLLOW
-                }
-                is CommentsModel ->{
-                    return VIEW_TYPE_COMMENT
-                }
-                is LikeModel ->{
-                    return VIEW_TYPE_LIKE
-                }
+            is FollowModel->{
+                return  VIEW_TYPE_FOLLOW
+            }
+            is CommentsModel ->{
+                return VIEW_TYPE_COMMENT
+            }
+            is LikeModel ->{
+                return VIEW_TYPE_LIKE
+            }
             }
         return 5
     }

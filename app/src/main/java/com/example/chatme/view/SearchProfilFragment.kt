@@ -47,6 +47,22 @@ class SearchProfilFragment : Fragment() {
             val authName=it.getString("authName")
             observerItem()
             viewModel.authFollowController(binding, mail!!,authName!!)
+            binding.searchFollowCount.setOnClickListener {
+                val bundle = bundleOf("incoming" to "follow","authName" to authName)
+                if (incoming.equals("search")){
+                    findNavController().navigate(R.id.action_searchProfilFragment_to_followAndFollowedFragment2,bundle)
+                }else{
+                    findNavController().navigate(R.id.action_searchProfilFragment2_to_followAndFollowedFragment,bundle)
+                }
+            }
+            binding.searchFollowedCount.setOnClickListener {
+                val bundle = bundleOf("incoming" to "followed","authName" to authName)
+                if (incoming.equals("search")){
+                    findNavController().navigate(R.id.action_searchProfilFragment_to_followAndFollowedFragment2,bundle)
+                }else{
+                    findNavController().navigate(R.id.action_searchProfilFragment2_to_followAndFollowedFragment,bundle)
+                }
+            }
             binding.follow.setOnClickListener {
                 val users =viewModel.authInformation.value
                 val currentUser=viewModel.currentUserInformation.value
@@ -82,22 +98,6 @@ class SearchProfilFragment : Fragment() {
                     binding.follow.setText("Takip Et")
                 }
             }
-            binding.searchFollowCount.setOnClickListener {
-                val bundle = bundleOf("incoming" to "follow","authName" to authName)
-                if (incoming.equals("search")){
-                    findNavController().navigate(R.id.action_searchProfilFragment_to_followAndFollowedFragment2,bundle)
-                }else{
-                    findNavController().navigate(R.id.action_searchProfilFragment2_to_followAndFollowedFragment,bundle)
-                }
-            }
-            binding.searchFollowedCount.setOnClickListener {
-                val bundle = bundleOf("incoming" to "followed","authName" to authName)
-                if (incoming.equals("search")){
-                    findNavController().navigate(R.id.action_searchProfilFragment_to_followAndFollowedFragment2,bundle)
-                }else{
-                    findNavController().navigate(R.id.action_searchProfilFragment2_to_followAndFollowedFragment,bundle)
-                }
-            }
         }
     }
     fun observerItem(){
@@ -124,6 +124,15 @@ class SearchProfilFragment : Fragment() {
     }
 
     fun updateUI(user: UserInformationModel) {
+        viewModel.database.collection("User Information").document(viewModel.getAuth.email.toString()).collection("followed").whereEqualTo("authName",user.authName).get().addOnSuccessListener {
+            if (it.isEmpty){
+                binding.hiddenProfil.visibility=View.VISIBLE
+                binding.searchUserImagesRecycler.visibility=View.GONE
+            }else{
+                binding.hiddenProfil.visibility=View.GONE
+                binding.searchUserImagesRecycler.visibility=View.VISIBLE
+            }
+        }
         binding.searchUserName.setText(user.name)
         binding.searchToolbar.toolbarUserAuthName.setText(user.authName)
         binding.searchBiography.setText(user.biography)
@@ -131,6 +140,15 @@ class SearchProfilFragment : Fragment() {
         binding.searchLayout.visibility = View.VISIBLE
         if (user.profilImage.isNotEmpty()){
             binding.searchImage.downloadUrl(user.profilImage, utils.placeHolder(requireContext()))
+        }
+        viewModel.userPost.observe(viewLifecycleOwner){
+            if (it.isEmpty()){
+                binding.emptyImageLayout.visibility=View.VISIBLE
+                binding.searchUserImagesRecycler.visibility=View.GONE
+            }else{
+                binding.emptyImageLayout.visibility=View.GONE
+                binding.searchUserImagesRecycler.visibility=View.VISIBLE
+            }
         }
     }
 }

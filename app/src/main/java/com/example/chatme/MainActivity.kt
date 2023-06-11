@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
 import com.example.chatme.databinding.ActivityMainBinding
+import com.example.chatme.util.Services
+import com.example.chatme.util.utils
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val uuid = UUID.randomUUID().variant()
         supportActionBar!!.hide()
         binding.mainBottomMenu.setOnItemSelectedListener { menuItem ->
             handleNavigation(menuItem.itemId)
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             R.id.homePageMenu -> {
-                if (currentDestination != R.id.homePageMenu) {
+                if (currentDestination != R.id.mainPageFragment) {
                     navController.setGraph(R.navigation.main_grapht)
                 }
             }

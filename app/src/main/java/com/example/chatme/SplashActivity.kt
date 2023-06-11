@@ -1,9 +1,12 @@
 package com.example.chatme
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import com.example.chatme.databinding.MainDialogViewBinding
+import com.example.chatme.util.utils
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +25,12 @@ class SplashActivity : AppCompatActivity() {
         }else{
             dialog()
         }
+        if (ContextCompat.checkSelfPermission(applicationContext,android.Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),100)
+        }
+        if ( ContextCompat.checkSelfPermission(applicationContext,android.Manifest.permission.VIBRATE)!=PackageManager.PERMISSION_GRANTED){
+            requestPermissions(arrayOf(android.Manifest.permission.VIBRATE),101)
+        }
     }
 
     fun dialog(){
@@ -38,6 +47,23 @@ class SplashActivity : AppCompatActivity() {
         view.createUser.setOnClickListener {
             intent.putExtra("incoming","register")
             startActivity(intent)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode==100){
+            if (ContextCompat.checkSelfPermission(applicationContext,android.Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),100)
+            }
+        }else if (requestCode==101){
+            if ( ContextCompat.checkSelfPermission(applicationContext,android.Manifest.permission.VIBRATE)!=PackageManager.PERMISSION_GRANTED){
+                requestPermissions(arrayOf(android.Manifest.permission.VIBRATE),101)
+            }
         }
     }
 }

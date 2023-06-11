@@ -66,6 +66,19 @@ class ProffilFragment : Fragment() {
             val bundle = bundleOf("authName" to viewModel.authInformation.value!!.authName,"incoming" to "followed")
             findNavController().navigate(R.id.action_proffilFragment_to_followAndFollowedFragment,bundle)
         }
+        binding.savePostListImage.setOnClickListener {
+            binding.savePostListLine.visibility=View.VISIBLE
+            binding.PostListLine.visibility=View.INVISIBLE
+            viewModel.savePost()
+        }
+        viewModel.savePostList.observe(viewLifecycleOwner){
+            adapter.updateData(it)
+        }
+        binding.postListImage.setOnClickListener {
+            binding.PostListLine.visibility=View.VISIBLE
+            binding.savePostListLine.visibility=View.INVISIBLE
+            viewModel.getPost()
+        }
     }
 
     fun observerItem(){
