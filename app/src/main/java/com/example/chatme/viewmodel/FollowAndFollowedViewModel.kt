@@ -95,8 +95,7 @@ class FollowAndFollowedViewModel @Inject constructor(
         val currentUserReference=database.collection("User Information").document(getAuth.email.toString())
         currentUserReference.collection("followed").document(user.authName).delete().addOnSuccessListener {
                 userReference.collection("follow").document(user.authName).delete().addOnSuccessListener {
-                        userReference.collection("notification")
-                            .document("${authName} follow").delete().addOnSuccessListener {
+                        userReference.collection("notification").document("${authName} follow").delete().addOnSuccessListener {
                                 userReference.collection("request").document(authName).delete().addOnSuccessListener {
 
                                 }

@@ -31,7 +31,7 @@
         <ImageView
             android:id="@+id/imageSuccessImageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_300sdp"
             android:src="@drawable/ic_launcher_background"
             android:visibility="invisible"
             android:layout_margin="@dimen/_10sdp"

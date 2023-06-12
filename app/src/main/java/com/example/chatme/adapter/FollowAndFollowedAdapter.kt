@@ -54,13 +54,12 @@ class FollowAndFollowedAdapter
         }
         holder.name.setText(list[position].name)
         holder.authName.setText(list[position].authName)
-
         val currentUserReference=viewModel.database.collection("User Information").document(viewModel.getAuth.email.toString())
         val userReference =viewModel.database.collection("User Information").document(list[position].mail)
         if (state.equals("follow")){
             currentUserReference.collection("followed").whereEqualTo("authName",list[position].authName).get().addOnSuccessListener{
                 if (it.isEmpty){
-                    currentUserReference.collection("request").whereEqualTo("authName",list[position].authName).whereGreaterThan("bool",false).get().addOnSuccessListener {
+                    currentUserReference.collection("sendRequest").whereEqualTo("authName",list[position].authName).get().addOnSuccessListener {
                         if (!it.isEmpty){
                             holder.button.setText("Bekleniyor")
                             holder.button.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
@@ -71,29 +70,34 @@ class FollowAndFollowedAdapter
                     }
                 }else{
                     holder.button.setText("Takip")
-                    holder.button.setBackgroundResource(R.drawable.button_background_shape)
+                    holder.button.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
                 }
             }
+        }else{
+            holder.button.setText("Takip")
+            holder.button.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
         }
-        holder.button.setText("Takip")
-        holder.button.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
         holder.button.setOnClickListener {
             holder.progress.visibility=View.VISIBLE
             holder.button.visibility=View.INVISIBLE
             if (holder.button.text.equals("Takip Et")){
                 viewModel.authFollow(holder.itemView.context,list[position])
+                buttonUpdate(holder,"Takip Et")
             }else if (holder.button.text.equals("Takip")){
                 val alertBuilder =AlertDialog.Builder(holder.itemView.context)
                 alertBuilder.setMessage("Takipten çıkarmak istediğinize emin misiniz")
                 alertBuilder.setTitle("Takipten çık")
                 alertBuilder.setPositiveButton("Takipten çık") { dialog, which ->
                     viewModel.authDeleteFollow(list[position], authName)
+                    buttonUpdate(holder,"Takip")
                 }
                 alertBuilder.setNegativeButton("İptal") { dialog, which ->
                    dialog.cancel()
                }
+                alertBuilder.show()
             }else if (holder.button.text.equals("Bekleniyor")){
                 viewModel.requestDeleteFollow(list[position])
+                buttonUpdate(holder,"Bekleniyor")
             }
         }
         holder.layout.setOnClickListener {
@@ -106,6 +110,17 @@ class FollowAndFollowedAdapter
         }
     }
 
+    fun buttonUpdate(holder: FollowAndFollowVH,state:String){
+        holder.progress.visibility=View.INVISIBLE
+        holder.button.visibility=View.VISIBLE
+        if (state.equals("Takip Et")){
+            holder.button.setText("Bekleniyor")
+            holder.button.setBackgroundResource(R.drawable.button_backgorund_gray_shape)
+        }else if (state.equals("Bekleniyor")){
+            holder.button.setText("Takip Et")
+            holder.button.setBackgroundResource(R.drawable.button_background_shape)
+        }
+    }
     fun updateData(newList: List<followedModel>) {
         val callback =CallbackRecycler(list,newList)
         val diffUtil =DiffUtil.calculateDiff(callback)
