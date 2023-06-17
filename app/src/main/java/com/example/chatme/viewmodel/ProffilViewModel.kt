@@ -49,13 +49,9 @@ class ProffilViewModel @Inject constructor(
     }
 
     fun getPost(){
-        database.collection("User Information").document(getAuth.email.toString()).get().addOnSuccessListener {authResult->
-            if (authResult.exists()){
-                database.collection("Posts").whereEqualTo("userWhoShared",authResult.get("authName")).get().addOnSuccessListener { postResult->
-                    val result =postResult.toObjects(PostModel::class.java)
-                    postList.value=result
-                }
-            }
+        database.collection("Posts").whereEqualTo("sharedMail",getAuth.email.toString()).get().addOnSuccessListener { postResult->
+            val result =postResult.toObjects(PostModel::class.java)
+            postList.value=result
         }
     }
 

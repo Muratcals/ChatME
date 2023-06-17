@@ -270,7 +270,7 @@ class SearchProfilViewModel @Inject constructor(
     }
 
     fun getUserImage(users: UserInformationModel){
-        database.collection("Posts").whereEqualTo("userWhoShared",users.authName).get().addOnSuccessListener {
+        database.collection("Posts").whereEqualTo("sharedMail",users.mail).get().addOnSuccessListener {
             val posts=it.toObjects(PostModel::class.java)
             userPost.value=posts
         }

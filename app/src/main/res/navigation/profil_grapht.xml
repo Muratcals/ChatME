@@ -17,12 +17,14 @@
             app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_proffilFragment_to_followAndFollowedFragment"
-            app:destination="@id/followAndFollowedFragment" />
+            app:destination="@id/followAndFollowedFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_proffilFragment_to_postDetailsFragmentFragment"
             app:destination="@id/postDetailsFragmentFragment"
-            app:enterAnim="@android:anim/slide_out_right"
-            app:popExitAnim="@android:anim/slide_in_left" />
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/profilEditFragment"
@@ -81,7 +83,9 @@
             app:argType="string" />
         <action
             android:id="@+id/action_searchProfilFragment2_to_followAndFollowedFragment"
-            app:destination="@id/followAndFollowedFragment" />
+            app:destination="@id/followAndFollowedFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <argument
             android:name="incoming"
             app:argType="string" />

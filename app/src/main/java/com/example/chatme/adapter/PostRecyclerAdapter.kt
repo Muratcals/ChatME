@@ -60,13 +60,29 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
     }
 
     override fun onBindViewHolder(holder: PostVH, position: Int) {
-        holder.postImage.downloadUrl(postList[position].imageUrl, placeHolder(holder.itemView.context))
-        holder.authImage.downloadUrl(postList[position].userWhoSharedImage, placeHolder(holder.itemView.context))
-        timeUpdate(holder,postList[position].time)
-        holder.authName.setText(postList[position].userWhoShared)
-        if (!postList[position].userWhoShared.equals(currentUserInformationModel.authName)){
-            holder.ellipsisDelete.visibility=View.GONE
+        database.collection("User Information").document(postList[position].sharedMail).get().addOnSuccessListener {
+            if (it.exists()){
+                val userInformation =it.toObject(UserInformationModel::class.java)
+                if (userInformation!!.profilImage.isEmpty()){
+                    holder.authImage.setImageResource(R.drawable.profil_icon)
+                }else{
+                    holder.authImage.downloadUrl(userInformation.profilImage, placeHolder(holder.itemView.context))
+                }
+                if (!userInformation.authName.equals(currentUserInformationModel.authName)){
+                    holder.ellipsisDelete.visibility=View.GONE
+                }
+                holder.authName.setText(userInformation.authName)
+                if (postList[position].explanation.isNotEmpty()){
+                    holder.explanationLayout.visibility=View.VISIBLE
+                    holder.explanationAuthName.setText(userInformation.authName)
+                    holder.explanationText.setText(postList[position].explanation)
+                }else{
+                    holder.explanationLayout.visibility=View.GONE
+                }
+            }
         }
+        holder.postImage.downloadUrl(postList[position].imageUrl, placeHolder(holder.itemView.context))
+        timeUpdate(holder,postList[position].time)
         database.collection("User Information").document(currentUserInformationModel.mail).collection("saveImage").document(postList[position].id).get().addOnSuccessListener {
             if (it.exists()){
                 holder.saveButton.progress=1F
@@ -95,28 +111,20 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
         }else{
             holder.numberOfLikes.visibility=View.GONE
         }
-        if (postList[position].explanation.isNotEmpty()){
-            holder.explanationLayout.visibility=View.VISIBLE
-            holder.explanationAuthName.setText(postList[position].userWhoShared)
-            holder.explanationText.setText(postList[position].explanation)
-        }else{
-            holder.explanationLayout.visibility=View.GONE
-        }
-
         holder.likeAnimation.setOnClickListener {
-            likeImages(holder,postList[position],postList[position].userWhoShared)
+            likeImages(holder,postList[position],postList[position].sharedMail)
         }
         holder.saveButton.setOnClickListener {
             holder.saveButton.playAnimation()
         }
         holder.authName.setOnClickListener {
-            if (holder.authName.equals(currentUserInformationModel.authName)){
+            if (postList[position].sharedMail.equals(currentUserInformationModel.mail)){
             holder.itemView.findNavController().navigate(R.id.action_mainPageFragment_to_proffilFragment3)
             }else{
-                database.collection("User Information").whereEqualTo("authName",postList[position].userWhoShared).get().addOnSuccessListener {
-                    if (!it.isEmpty){
-                        val userInformation=it.toObjects(UserInformationModel::class.java)
-                        val bundle = bundleOf("authName" to postList[position].userWhoShared,"incoming" to "share","mail" to userInformation[0].mail)
+                database.collection("User Information").document(postList[position].sharedMail).get().addOnSuccessListener {
+                    if (it.exists()){
+                        val userInformation=it.toObject(UserInformationModel::class.java)
+                        val bundle = bundleOf("authName" to userInformation!!.authName,"incoming" to "share","mail" to userInformation.mail)
                         holder.itemView.findNavController().navigate(R.id.action_mainPageFragment_to_searchProfilFragment3,bundle)
                     }
                 }
@@ -180,7 +188,7 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
 
     }
 
-    fun likeImages(holder: PostVH, document: PostModel,authName:String){
+    fun likeImages(holder: PostVH, document: PostModel,mail:String){
             if (holder.likeAnimation.progress==0F){
                 holder.likeAnimation.playAnimation()
                 if (holder.numberOfLikes.text.isEmpty()){
@@ -191,18 +199,19 @@ class PostRecyclerAdapter(val database:FirebaseFirestore,val currentUserInformat
                     val number = parts[0]
                     holder.numberOfLikes.setText("${number.toInt()+1} beğenme")
                 }
-
                 MainScope().launch(Dispatchers.IO) {
                     val postLikeModel =UserWhoLikesModel(currentUserInformationModel.mail,currentUserInformationModel.name,currentUserInformationModel.authName,currentUserInformationModel.profilImage,Timestamp.now())
                     val notificationLikeModel =LikeModel(document.id,currentUserInformationModel.authName,currentUserInformationModel.profilImage,document.imageUrl,"like",currentUserInformationModel.mail)
                     database.collection("Posts").document(document.id).collection("userWhoLike").document(currentUserInformationModel.authName).set(postLikeModel).addOnSuccessListener {
                         database.collection("Posts").document(document.id).collection("userWhoLike").get().addOnSuccessListener {
                             database.collection("Posts").document(document.id).update("numberOfLikes",it.size()).addOnSuccessListener {
-                                database.collection("User Information").whereEqualTo("authName",authName).get().addOnSuccessListener {userModel->
-                                    val userInformationModel=userModel.toObjects(UserInformationModel::class.java)
-                                    if (!userInformationModel[0].mail.equals(FirebaseAuth.getInstance().currentUser!!.email.toString())){
-                                        database.collection("User Information").document(userInformationModel[0].mail).collection("notification").document("${currentUserInformationModel.authName} like").set(notificationLikeModel).addOnSuccessListener {
+                                database.collection("User Information").document(mail).get().addOnSuccessListener {userModel->
+                                    if (userModel.exists()){
+                                        val userInformationModel=userModel.toObject(UserInformationModel::class.java)
+                                        if (!userInformationModel!!.mail.equals(FirebaseAuth.getInstance().currentUser!!.email.toString())){
+                                            database.collection("User Information").document(userInformationModel.mail).collection("notification").document("${currentUserInformationModel.authName} like").set(notificationLikeModel).addOnSuccessListener {
 
+                                            }
                                         }
                                     }
                                 }

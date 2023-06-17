@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.chatme.databinding.FragmentPostDetailsBinding
 import com.example.chatme.model.PostModel
+import com.example.chatme.model.UserInformationModel
 import com.example.chatme.util.utils.downloadUrl
 import com.example.chatme.util.utils.placeHolder
 import com.example.chatme.viewmodel.PostDetailsViewModel
@@ -41,19 +42,24 @@ class PostDetailsFragmentFragment : Fragment() {
                 if (it.exists()){
                     val postDetails =it.toObject(PostModel::class.java)
                     timeUpdate(postDetails!!.time)
-                    binding.profilPostDetailsLayout.anaMenuPostAuthName.setText(postDetails.userWhoShared)
-                    binding.profilPostDetailsLayout.anaMenuPostAuthImage.downloadUrl(postDetails.userWhoSharedImage,
-                        placeHolder(requireContext())
-                    )
-                    binding.profilPostDetailsLayout.anaMenuPostImage.downloadUrl(postDetails.imageUrl,
-                        placeHolder(requireContext())
-                    )
-                    if (postDetails.explanation.isEmpty()){
-                        binding.profilPostDetailsLayout.anaMenuPostExplanationLayout.visibility=View.GONE
-                    }else{
-                        binding.profilPostDetailsLayout.anaMenuPostExplanationAuthName.setText(postDetails.userWhoShared)
-                        binding.profilPostDetailsLayout.anaMenuPostExplanationText.setText(postDetails.explanation)
-                        binding.profilPostDetailsLayout.anaMenuPostNumberOfLikes.setText("${postDetails.numberOfLikes} beğenme")
+                    viewModel.database.collection("User Information").document(postDetails.sharedMail).get().addOnSuccessListener {userModel->
+                        if (it.exists()){
+                            val data =userModel.toObject(UserInformationModel::class.java)
+                            binding.profilPostDetailsLayout.anaMenuPostAuthName.setText(data!!.authName)
+                            binding.profilPostDetailsLayout.anaMenuPostAuthImage.downloadUrl(data.profilImage,
+                                placeHolder(requireContext())
+                            )
+                            binding.profilPostDetailsLayout.anaMenuPostImage.downloadUrl(postDetails.imageUrl,
+                                placeHolder(requireContext())
+                            )
+                            if (postDetails.explanation.isEmpty()){
+                                binding.profilPostDetailsLayout.anaMenuPostExplanationLayout.visibility=View.GONE
+                            }else{
+                                binding.profilPostDetailsLayout.anaMenuPostExplanationAuthName.setText(data.authName)
+                                binding.profilPostDetailsLayout.anaMenuPostExplanationText.setText(postDetails.explanation)
+                                binding.profilPostDetailsLayout.anaMenuPostNumberOfLikes.setText("${postDetails.numberOfLikes} beğenme")
+                            }
+                        }
                     }
                     it.reference.collection("comments").get().addOnSuccessListener {
                         if (!it.isEmpty){

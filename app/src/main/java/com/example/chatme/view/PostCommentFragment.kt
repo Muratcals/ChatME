@@ -60,11 +60,14 @@ class PostCommentFragment : Fragment() {
                 }
             }
             viewModel.post.observe(viewLifecycleOwner){
-                binding.commentsAuthImage.downloadUrl(it.userWhoSharedImage, placeHolder(requireContext()))
-                binding.commentsExplanationText.setText(it.explanation)
-                binding.commentsUserWhoShared.setText(it.userWhoShared)
-                binding.addCommentAuthImage.downloadUrl(it.userWhoSharedImage, placeHolder(requireContext()))
-                binding.commentEdittext.setHint("${currentAuthName} adıyla yorum ekle")
+                viewModel.database.collection("User Information").document(it.sharedMail).get().addOnSuccessListener {userModel->
+                    val data =userModel.toObject(UserInformationModel::class.java)
+                    binding.commentsAuthImage.downloadUrl(data!!.profilImage, placeHolder(requireContext()))
+                    binding.commentsExplanationText.setText(it.explanation)
+                    binding.commentsUserWhoShared.setText(data.authName)
+                    binding.addCommentAuthImage.downloadUrl(data.profilImage, placeHolder(requireContext()))
+                    binding.commentEdittext.setHint("${currentAuthName} adıyla yorum ekle")
+                }
                 val time =Timestamp.now().seconds-it.time.seconds
                 val minute =time/60
                 val hour =minute/60
@@ -100,7 +103,7 @@ class PostCommentFragment : Fragment() {
                 viewModel.database.collection("Posts").document(postId).get().addOnSuccessListener {
                     if (it.exists()){
                         val sharedAuthModel =it.toObject(PostModel::class.java)
-                        viewModel.postComments(view,postId,binding.commentEdittext.text.toString(),sharedAuthModel!!.userWhoShared)
+                        viewModel.postComments(view,postId,binding.commentEdittext.text.toString(),sharedAuthModel!!.sharedMail)
                         binding.commentEdittext.text.clear()
                     }
 

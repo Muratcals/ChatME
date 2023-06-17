@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_searchFragment_to_searchProfilFragment"
-            app:destination="@id/searchProfilFragment" />
+            app:destination="@id/searchProfilFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_searchFragment_to_proffilFragment2"
             app:destination="@id/proffilFragment2"

@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.chatme.R
+import com.example.chatme.adapter.PostRecyclerView
 import com.example.chatme.databinding.FragmentSearchProfilBinding
 import com.example.chatme.model.UserInformationModel
 import com.example.chatme.model.followedModel
@@ -124,6 +126,7 @@ class SearchProfilFragment : Fragment() {
     }
 
     fun updateUI(user: UserInformationModel) {
+        viewModel.getUserImage(user)
         viewModel.database.collection("User Information").document(viewModel.getAuth.email.toString()).collection("followed").whereEqualTo("authName",user.authName).get().addOnSuccessListener {
             if (it.isEmpty){
                 binding.hiddenProfil.visibility=View.VISIBLE
@@ -146,8 +149,12 @@ class SearchProfilFragment : Fragment() {
                 binding.emptyImageLayout.visibility=View.VISIBLE
                 binding.searchUserImagesRecycler.visibility=View.GONE
             }else{
+                val adapter =PostRecyclerView(it)
+                binding.searchUserImagesRecycler.adapter=adapter
+                binding.searchUserImagesRecycler.layoutManager=GridLayoutManager(requireContext(),3)
                 binding.emptyImageLayout.visibility=View.GONE
                 binding.searchUserImagesRecycler.visibility=View.VISIBLE
+
             }
         }
     }

@@ -113,6 +113,8 @@ class ProffilFragment : Fragment() {
         binding.profilLayout.visibility = View.VISIBLE
         if (user.profilImage.isNotEmpty()){
             binding.profilImage.downloadUrl(user.profilImage, placeHolder(requireContext()))
+        }else{
+            binding.profilImage.setImageResource(R.drawable.profil_icon)
         }
     }
 }

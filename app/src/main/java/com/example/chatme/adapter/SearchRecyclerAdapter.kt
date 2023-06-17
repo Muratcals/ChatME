@@ -47,6 +47,9 @@ class SearchRecyclerAdapter(
     override fun onBindViewHolder(holder: SearchVH, position: Int) {
         if (searchItems[position].profilImage.isNotEmpty()){
             holder.image.downloadUrl(searchItems[position].profilImage, placeHolder(holder.itemView.context))
+        }else{
+            holder.image.setImageResource(R.drawable.profil_icon)
+
         }
         holder.searchLayout.setOnClickListener {
             if (searchItems[position].mail.equals(getAuth.email.toString())){

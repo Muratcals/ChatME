@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.chatme.model.PostModel
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.Dispatchers
@@ -23,11 +24,13 @@ class MainPageViewModel @Inject constructor(
     val progress = MutableLiveData<Boolean>()
     fun getPostList() {
         progress.value = true
-        database.collection("Posts").get().addOnSuccessListener { value ->
-            if (value != null) {
-                val postListResult = value.toObjects(PostModel::class.java)
-                postList.value=postListResult
-                progress.value=false
+        viewModelScope.launch(Dispatchers.IO) {
+            database.collection("Posts").orderBy("time",Query.Direction.DESCENDING).get().addOnSuccessListener { value ->
+                if (value != null) {
+                    val postListResult = value.toObjects(PostModel::class.java)
+                    postList.value=postListResult
+                    progress.value=false
+                }
             }
         }
     }

@@ -187,6 +187,11 @@ class FollowRquestRecyclerAdapter(var requestsList:List<Any>,val database: Fireb
                         placeHolder(holder.itemView.context))
                 }
             }
+            if (list.authImage.isEmpty()){
+                holder.binding.notificationCommentAuthImage.setImageResource(R.drawable.profil_icon)
+            }else{
+                holder.binding.notificationCommentAuthImage.downloadUrl(list.authImage, placeHolder(holder.itemView.context))
+            }
             newHolder.binding.notificationCommentLayout.setOnClickListener {
                 val bundle = bundleOf("postId" to list.postId)
                 holder.itemView.findNavController().navigate(R.id.action_notificationFragment_to_postDetailsFragmentFragment2,bundle)
@@ -203,6 +208,11 @@ class FollowRquestRecyclerAdapter(var requestsList:List<Any>,val database: Fireb
                     newHolder.binding.notificationLikeImage.downloadUrl(it.get("imageUrl") as String,
                         placeHolder(holder.itemView.context))
                 }
+            }
+            if (list.authImage.isEmpty()){
+                holder.binding.notificationLikeAuthImage.setImageResource(R.drawable.profil_icon)
+            }else{
+                holder.binding.notificationLikeAuthImage.downloadUrl(list.authImage, placeHolder(holder.itemView.context))
             }
             newHolder.binding.notificationLikeLayout.setOnClickListener {
                 val bundle = bundleOf("postId" to list.postId)

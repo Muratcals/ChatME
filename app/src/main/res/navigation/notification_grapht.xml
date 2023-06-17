@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_notification" >
         <action
             android:id="@+id/action_notificationFragment_to_followRequestFragment"
-            app:destination="@id/followRequestFragment" />
+            app:destination="@id/followRequestFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_notificationFragment_to_postDetailsFragmentFragment2"
             app:destination="@id/postDetailsFragmentFragment2"
@@ -20,7 +22,9 @@
             app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_notificationFragment_to_postCommentFragment22"
-            app:destination="@id/postCommentFragment2" />
+            app:destination="@id/postCommentFragment2"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/followRequestFragment"

@@ -4,8 +4,7 @@ import com.google.firebase.Timestamp
 
 
 class PostModel(
-    val userWhoShared:String,
-    val userWhoSharedImage:String,
+    val sharedMail:String,
     val explanation:String,
     val imageUrl:String,
     val id:String,
@@ -14,5 +13,5 @@ class PostModel(
 
 ) {
 
-    constructor() : this("","","","","",0)
+    constructor() : this("","","","",0)
 }

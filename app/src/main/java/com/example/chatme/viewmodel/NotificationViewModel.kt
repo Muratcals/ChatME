@@ -41,7 +41,7 @@ class NotificationViewModel @Inject constructor(
         currentUser.collection("notification").orderBy("time",Query.Direction.DESCENDING).addSnapshotListener { value, error ->
             val followArray = mutableListOf<Any>()
             if (value!=null){
-                for (document in value!!.documents){
+                for (document in value.documents){
                     val categoryName =document.get("categoryName")
                     if (categoryName!!.equals("request")) {
                         val requestModel = document.toObject(RequestModel::class.java)

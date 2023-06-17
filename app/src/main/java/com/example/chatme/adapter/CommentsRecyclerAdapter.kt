@@ -77,7 +77,12 @@ class CommentsRecyclerAdapter(var commentList:List<CommentsModel>,val database:F
         updateTime(holder,commentList[position].time)
         holder.commenstExplanation.setText(commentList[position].commentText)
         holder.commentsAuthName.setText(commentList[position].authName)
-        holder.commentsAuthImage.downloadUrl(commentList[position].authImage, placeHolder(holder.itemView.context))
+        if (commentList[position].authImage.isEmpty()){
+            holder.commentsAuthImage.setImageResource(R.drawable.profil_icon)
+        }else{
+            holder.commentsAuthImage.downloadUrl(commentList[position].authImage, placeHolder(holder.itemView.context))
+        }
+
     }
 
 
@@ -107,13 +112,9 @@ class CommentsRecyclerAdapter(var commentList:List<CommentsModel>,val database:F
 
     fun deleteComment(context: Context,comment:CommentsModel,){
         database.collection("Posts").document(documentId).collection("comments").document(comment.commentId).delete().addOnSuccessListener {
-            database.collection("Posts").document(comment.postId).get().addOnSuccessListener {post->
-                val postContent =post.toObject(PostModel::class.java)
-                database.collection("User Information").document(comment.mail).collection("notification").document(postContent!!.userWhoShared).delete().addOnSuccessListener {
-                    Toast.makeText(context, "Yorum silindi", Toast.LENGTH_SHORT).show()
-                }
+            database.collection("User Information").document(comment.mail).collection("notification").document(comment.authName).delete().addOnSuccessListener {
+                Toast.makeText(context, "Yorum silindi", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
 }

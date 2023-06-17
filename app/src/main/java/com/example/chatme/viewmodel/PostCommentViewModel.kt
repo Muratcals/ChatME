@@ -45,17 +45,17 @@ class PostCommentViewModel @Inject constructor(
         }
     }
 
-    fun postComments(view: View, documentId:String,commentText:String,sharedAuthName:String){
+    fun postComments(view: View, documentId:String,commentText:String,mail:String){
         val uuid=UUID.randomUUID().toString()
         database.collection("User Information").document(getAuth.email.toString()).get().addOnSuccessListener {userList->
             val userInformation=userList.toObject(UserInformationModel::class.java)
             val commentsData=CommentsModel(documentId,uuid,commentText,userInformation!!.authName,userInformation.profilImage,"comment",userInformation.mail)
             database.collection("Posts").document(documentId).collection("comments").document(uuid).set(commentsData).addOnSuccessListener {
-                database.collection("User Information").whereEqualTo("authName",sharedAuthName).get().addOnSuccessListener {sharedUser->
-                    if (!sharedUser.isEmpty){
-                        val sharedUserInformation =sharedUser.toObjects(UserInformationModel::class.java)
-                        if (!sharedUserInformation[0].mail.equals(getAuth.email.toString())){
-                            database.collection("User Information").document(sharedUserInformation[0].mail).collection("notification").document(uuid).set(commentsData).addOnSuccessListener {
+                database.collection("User Information").document(mail).get().addOnSuccessListener {sharedUser->
+                    if (sharedUser.exists()){
+                        val sharedUserInformation =sharedUser.toObject(UserInformationModel::class.java)
+                        if (!sharedUserInformation!!.mail.equals(getAuth.email.toString())){
+                            database.collection("User Information").document(sharedUserInformation.mail).collection("notification").document(uuid).set(commentsData).addOnSuccessListener {
                                 Toast.makeText(view.context, "Yorum kaydedildi", Toast.LENGTH_SHORT).show()
                             }
                         }else{

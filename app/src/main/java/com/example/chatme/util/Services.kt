@@ -19,7 +19,6 @@ class Services():Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        sendNotification("deneme","deneme içerik")
         return START_STICKY
     }
 
@@ -30,11 +29,11 @@ class Services():Service() {
 
 
 
-    fun createNotificationChannel(){
+    fun createNotificationChannel(context: Context){
         val name ="Application Notification"
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel("my_channel",name,importance)
-        val notificationManager: NotificationManager =this.getSystemService(NotificationManager::class.java) as NotificationManager
+        val notificationManager: NotificationManager =context.getSystemService(NotificationManager::class.java) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
     fun deleteNot(context: Context){
@@ -42,8 +41,8 @@ class Services():Service() {
         println(notificationManager.notificationChannels[0].id)
     }
 
-    fun sendNotification(baslik:String, icerik:String){
-        createNotificationChannel()
+    fun sendNotification(context: Context,baslik:String, icerik:String){
+        createNotificationChannel(context)
         val builder = NotificationCompat.Builder(this,"my_channel")
             .setSmallIcon(R.drawable._logo)
             .setContentTitle(baslik)
@@ -51,7 +50,7 @@ class Services():Service() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         if (ContextCompat.checkSelfPermission(
-                this,
+                context,
                 Manifest.permission.VIBRATE
             ) == PackageManager.PERMISSION_GRANTED
         ) {

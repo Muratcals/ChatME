@@ -40,7 +40,7 @@ class ImageSuccessragmentViewModel @Inject constructor(
                         if (it.exists()){
                             val currentUserData=it.toObject(UserInformationModel::class.java)
                             val url =downloadUrl.toString()
-                            val imageData=PostModel(currentUserData!!.authName,currentUserData.profilImage,explanation,url,databaseUuid,0)
+                            val imageData=PostModel(currentUserData!!.mail,explanation,url,databaseUuid,0)
                             database.collection("Posts").document(databaseUuid).set(imageData).addOnSuccessListener {
                                 activity.runOnUiThread {
                                     Toast.makeText(activity.applicationContext, "Fotoğraf başarıyla yüklendi", Toast.LENGTH_SHORT).show()

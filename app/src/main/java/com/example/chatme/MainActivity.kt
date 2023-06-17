@@ -104,7 +104,6 @@ class MainActivity : AppCompatActivity(),BroadcastRecevierServices.ConnectivityR
         BroadcastRecevierServices.connectivityListener=this
     }
 
-
     /*
            button.setOnClickListener {
                firebase.orderByChild("receivingTheMessage").equalTo("murat").get().addOnSuccessListener { snapshot->
